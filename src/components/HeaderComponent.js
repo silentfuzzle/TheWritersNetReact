@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import LoginOrSignup from './pieces/LoginOrSignupComponent';
+import UserNavigator from './pieces/UserNavigatorComponent';
 
 class Header extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isNavOpen: false,
-            isLoggedIn: false
+            isNavOpen: false
         };
 
         this.toggleNav = this.toggleNav.bind(this);
@@ -22,6 +22,11 @@ class Header extends Component {
     }
 
     render() {
+        let userOptions = <LoginOrSignup toggleSignupModal={this.props.toggleSignupModal} />
+        if (this.props.isLoggedIn) {
+            userOptions = <UserNavigator />
+        }
+
         return (
             <React.Fragment>
                 <Navbar dark expand="sm" color="dark" className="fixed-top">
@@ -35,7 +40,7 @@ class Header extends Component {
                                 </NavItem>
                             </Nav>
                             <div className="ml-auto">
-                                <LoginOrSignup />
+                                {userOptions}
                             </div>
                         </Collapse>
                     </div>
