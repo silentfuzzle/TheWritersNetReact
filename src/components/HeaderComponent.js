@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import LoginOrSignup from './pieces/LoginOrSignupComponent';
 
 class Header extends Component {
     constructor(props) {
@@ -33,6 +34,9 @@ class Header extends Component {
                                     <NavLink className="nav-link" to="/library">Library</NavLink>
                                 </NavItem>
                             </Nav>
+                            <div className="ml-auto">
+                                <LoginOrSignup />
+                            </div>
                         </Collapse>
                     </div>
                 </Navbar>
