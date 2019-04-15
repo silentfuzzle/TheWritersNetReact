@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { fetchBooks } from '../../redux/booksReducer';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
+import { calculatePageSlice } from '../../utils/pagination';
 
 const mapStateToProps = state => {
     let books = [];
@@ -57,7 +58,8 @@ class LibraryTable extends Component {
             filterResults: false,
             keywords: '',
             orderby: '',
-            orderasc: true
+            orderasc: true,
+            page: 1
         }
 
         this.headerData = [
@@ -88,23 +90,34 @@ class LibraryTable extends Component {
             }
         ];
 
+        this.anchor = 'library';
+
         this.filterToggle = this.filterToggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.setSort = this.setSort.bind(this);
+        this.setPage = this.setPage.bind(this);
         this.renderHead = this.renderHead.bind(this);
         this.renderBody = this.renderBody.bind(this);
     }
 
     filterToggle() {
         this.setState({
-            filterResults: !this.state.filterResults
+            filterResults: !this.state.filterResults,
+            page: 1
         });
     }
 
     handleChange(event) {
-        this.setState({
-            keywords: event.target.value
-        });
+        if (this.state.filterResults) {
+            this.setState({
+                keywords: event.target.value,
+                page: 1
+            });
+        } else {
+            this.setState({
+                keywords: event.target.value
+            });
+        }
     }
 
     setSort(orderby) {
@@ -120,31 +133,13 @@ class LibraryTable extends Component {
         }
     }
 
-    renderColumns() {
-        return (
-            <colgroup>
-                <col style={{width: '20%'}} />
-                <col style={{width: '40%'}} />
-                <col style={{width: '20%'}} />
-                <col style={{width: '10%'}} />
-                <col style={{width: '10%'}} />
-            </colgroup>
-        );
-    }
-
-    renderHead() {
-        return this.headerData.map(header => {
-            return (
-                <SortableColumn key={header.id} header={header} 
-                    orderby={this.state.orderby} 
-                    orderasc={this.state.orderasc} 
-                    anchor={'#library'} 
-                    setSort={(orderby) => this.setSort(orderby)} />
-            );
+    setPage(page) {
+        this.setState({
+            page: page
         });
     }
 
-    renderBody() {
+    getBooks() {
         let books = this.props.books;
 
         if (this.state.filterResults && this.state.keywords.trim().length > 0) {
@@ -174,30 +169,56 @@ class LibraryTable extends Component {
                 books = books.reverse();
             }
         }
+        
+        return books;
+    }
 
-        books = books.map(book => {
-            const authors = book.authors.map(author => {
-                return (
-                    <li key={author.id}><Link to={`/profile/${author.id}`}>{author.name}</Link></li>
-                );
-            });
+    renderColumns() {
+        return (
+            <colgroup>
+                <col style={{width: '20%'}} />
+                <col style={{width: '40%'}} />
+                <col style={{width: '20%'}} />
+                <col style={{width: '10%'}} />
+                <col style={{width: '10%'}} />
+            </colgroup>
+        );
+    }
 
+    renderHead() {
+        return this.headerData.map(header => {
             return (
-                <tr key={book.id}>
-                    <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
-                    <td>{book.subtitle}</td>
-                    <td>
-                        <ul className="list-unstyled">{authors}</ul>
-                    </td>
-                    <td><Progress value={book.length} color="dark" /></td>
-                    <td>{book.rating}/5</td>
-                </tr>
+                <SortableColumn key={header.id} header={header} 
+                    orderby={this.state.orderby} 
+                    orderasc={this.state.orderasc} 
+                    anchor={'#' + this.anchor} 
+                    setSort={(orderby) => this.setSort(orderby)} />
             );
         });
+    }
 
+    renderBody(books) {
         return (
             <React.Fragment>
-                {books}
+                {books.map(book => {
+                        const authors = book.authors.map(author => {
+                            return (
+                                <li key={author.id}><Link to={`/profile/${author.id}`}>{author.name}</Link></li>
+                            );
+                        });
+
+                        return (
+                            <tr key={book.id}>
+                                <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
+                                <td>{book.subtitle}</td>
+                                <td>
+                                    <ul className="list-unstyled">{authors}</ul>
+                                </td>
+                                <td><Progress value={book.length} color="dark" /></td>
+                                <td>{book.rating}/5</td>
+                            </tr>
+                        );
+                    })}
             </React.Fragment>
         );
     }
@@ -217,9 +238,13 @@ class LibraryTable extends Component {
             );
         }
 
+        let books = this.getBooks();
+        const totalItems = books.length;
+        books = books.slice(...calculatePageSlice(this.state.page));
+
         return (
             <React.Fragment>
-                <div id="library" className="row justify-content-end">
+                <div id={this.anchor} className="row justify-content-end">
                     <div className="col-sm-12 col-md-8 col-lg-6">
                         <InputGroup className="mb-3">
                             <Input type="text" placeholder="Keywords" 
@@ -233,7 +258,14 @@ class LibraryTable extends Component {
                         </InputGroup>
                     </div>
                 </div>
-                <TableContainer columns={this.renderColumns} thead={this.renderHead} tbody={this.renderBody} />
+                <TableContainer columns={this.renderColumns} 
+                    thead={this.renderHead} 
+                    tbody={this.renderBody}
+                    items={books}
+                    anchor={'#' + this.anchor}
+                    setPage={(page) => this.setPage(page)}
+                    currPage={this.state.page}
+                    totalItems={totalItems} />
             </React.Fragment>
         );
     }
