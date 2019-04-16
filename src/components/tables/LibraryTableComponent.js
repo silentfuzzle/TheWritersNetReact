@@ -2,59 +2,30 @@ import React, { Component } from 'react';
 import { Progress, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchBooks } from '../../redux/booksReducer';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 
 const mapStateToProps = state => {
-    let books = [];
-    if (!state.books.isLoading && !state.books.errMess) {
-        books = state.books.books.map(book => {
-            const authors = state.permissions
-                .filter(p => 
-                    p.bookid === book.id && p.permissionid < 3)
-                .sort((a1, a2) => 
-                    (a1.permissionid > a2.permissionid) ? 1 : ((a2.permissionid > a1.permissionid) ? -1 : 0))
-                .map(permission => {
-                    let author = state.users.find(user => user.id === permission.userid);
-                    return {
-                        id: author.id,
-                        name: author.displayname
-                    };
-                });
-    
-            const reviews = state.reviews.filter(review => review.bookid === book.id);
-            let rating = reviews.reduce((total, review) => total += review.rating, 0);
-            rating = Math.round(rating / reviews.length * 100) / 100;
-    
-            return {
-                id: book.id,
-                title: book.title,
-                subtitle: book.subtitle,
-                authors: authors,
-                length: book.length,
-                rating: rating
-            }
-        });
-    }
-
+    // With an actual database, this method would not be necessary
     return {
-        isLoading: state.books.isLoading,
-        errMess: state.books.errMess,
-        books: books
+        books: state.books,
+        permissions: state.permissions,
+        users: state.users,
+        reviews: state.reviews
     };
 };
-
-const mapDispatchToProps = (dispatch) => ({
-    fetchBooks: () => {dispatch(fetchBooks())}
-})
 
 class LibraryTable extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            books: {
+                isLoading: false,
+                errMess: '',
+                books: []
+            },
             filterResults: false,
             keywords: '',
             orderby: '',
@@ -100,6 +71,80 @@ class LibraryTable extends Component {
         this.renderBody = this.renderBody.bind(this);
     }
 
+    fetchBooks() {
+        // This method would fetch the books from a database in the required form
+        // It may also handle filtering, sorting, and pagination if the database is very large
+        let books = this.props.books.map(book => {
+            const authors = this.props.permissions
+                .filter(p => 
+                    p.bookid === book.id && p.permissionid < 3)
+                .sort((a1, a2) => 
+                    (a1.permissionid > a2.permissionid) ? 1 : ((a2.permissionid > a1.permissionid) ? -1 : 0))
+                .map(permission => {
+                    let author = this.props.users.find(user => user.id === permission.userid);
+                    return {
+                        id: author.id,
+                        name: author.displayname
+                    };
+                });
+    
+            const reviews = this.props.reviews.filter(review => review.bookid === book.id);
+            let rating = reviews.reduce((total, review) => total += review.rating, 0);
+            rating = Math.round(rating / reviews.length * 100) / 100;
+    
+            return {
+                id: book.id,
+                title: book.title,
+                subtitle: book.subtitle,
+                authors: authors,
+                length: book.length,
+                rating: rating
+            }
+        });
+
+        this.setState({
+            books: {
+                isLoading: false,
+                errMess: '',
+                books: books
+            }
+        });
+    }
+
+    getBooks() {
+        let books = this.state.books.books;
+
+        if (this.state.filterResults && this.state.keywords.trim().length > 0) {
+            const keywords = this.state.keywords.toLowerCase();
+
+            books = books.filter(book => {
+                let authorIncludes = book.authors.find(author => author.name.toLowerCase().includes(keywords));
+
+                return (book.title.toLowerCase().includes(keywords) || 
+                    book.subtitle.toLowerCase().includes(keywords) || 
+                    authorIncludes);
+            });
+        }
+
+        if (this.state.orderby !== '') {
+            const orderby = this.state.orderby;
+
+            books = books.sort((a, b) => {
+                if (orderby === 'authors') {
+                    return (a.authors[0].name > b.authors[0].name) ? 1 : ((b.authors[0].name > a.authors[0].name) ? -1 : 0);
+                } else {
+                    return (a[orderby] > b[orderby]) ? 1 : ((b[orderby] > a[orderby]) ? -1 : 0);
+                }
+            });
+
+            if (!this.state.orderasc) {
+                books = books.reverse();
+            }
+        }
+
+        return books;
+    }
+
     filterToggle() {
         this.setState({
             filterResults: !this.state.filterResults,
@@ -137,40 +182,6 @@ class LibraryTable extends Component {
         this.setState({
             page: page
         });
-    }
-
-    getBooks() {
-        let books = this.props.books;
-
-        if (this.state.filterResults && this.state.keywords.trim().length > 0) {
-            const keywords = this.state.keywords.toLowerCase();
-
-            books = books.filter(book => {
-                let authorIncludes = book.authors.find(author => author.name.toLowerCase().includes(keywords));
-
-                return (book.title.toLowerCase().includes(keywords) || 
-                    book.subtitle.toLowerCase().includes(keywords) || 
-                    authorIncludes);
-            });
-        }
-
-        if (this.state.orderby !== '') {
-            const orderby = this.state.orderby;
-
-            books = books.sort((a, b) => {
-                if (orderby === 'authors') {
-                    return (a.authors[0].name > b.authors[0].name) ? 1 : ((b.authors[0].name > a.authors[0].name) ? -1 : 0);
-                } else {
-                    return (a[orderby] > b[orderby]) ? 1 : ((b[orderby] > a[orderby]) ? -1 : 0);
-                }
-            });
-
-            if (!this.state.orderasc) {
-                books = books.reverse();
-            }
-        }
-        
-        return books;
     }
 
     renderColumns() {
@@ -224,17 +235,17 @@ class LibraryTable extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchBooks();
+        this.fetchBooks();
     }
 
     render() {
-        if (this.props.isLoading) {
+        if (this.state.books.isLoading) {
             return (
                 <h4>Loading Books...</h4>
             );
-        } else if (this.props.errMess) {
+        } else if (this.state.books.errMess) {
             return (
-                <h4>{this.props.errMess}</h4>
+                <h4>{this.state.books.errMess}</h4>
             );
         }
 
@@ -271,4 +282,4 @@ class LibraryTable extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LibraryTable);
+export default connect(mapStateToProps)(LibraryTable);
