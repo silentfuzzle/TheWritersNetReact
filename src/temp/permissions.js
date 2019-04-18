@@ -23,5 +23,17 @@ export const PERMISSIONS =
         bookid: 3,
         userid: 4,
         permissionid: 1
+    },
+    {
+        id: 5,
+        bookid: 2,
+        userid: 1,
+        permissionid: 2
+    },
+    {
+        id: 6,
+        bookid: 3,
+        userid: 1,
+        permissionid: 2
     }
 ];

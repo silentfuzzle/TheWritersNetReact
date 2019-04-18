@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class UserNavigator extends Component {
@@ -25,12 +26,12 @@ class UserNavigator extends Component {
                     Hello, {this.props.displayName}!
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem>My Library</DropdownItem>
+                    <DropdownItem><Link to="/mylibrary">My Library</Link></DropdownItem>
                     <DropdownItem>View Profile</DropdownItem>
                     <DropdownItem>Edit Profile</DropdownItem>
                     <DropdownItem>Settings</DropdownItem>
                     <DropdownItem divider />
-                    <DropdownItem onClick={this.props.postLogout}>Logout</DropdownItem>
+                    <DropdownItem><a id="#logout" href="#logout" onClick={this.props.postLogout}>Logout</a></DropdownItem>
                 </DropdownMenu>
             </ButtonDropdown>
         );

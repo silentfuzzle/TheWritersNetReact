@@ -34,7 +34,11 @@ export const addLogin = (user) => ({
 });
 
 export const Login = (state = {
-    user: null,
+    user: {
+        id: 1,
+        username: 'rawbertgates',
+        displayname: 'Robert Gates'
+    },
     isLoading: false,
     errMess: ''
 }, action) => {

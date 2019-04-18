@@ -1,32 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import ReviewModal from '../modals/ReviewModalComponent';
+import MyBooksTable from '../tables/MyBooksTableComponent';
 
 class MyLibrary extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            deleteModalOpen: false,
             removeModalOpen: false
         }
-    }
 
-    toggleDeleteModal() {
-        this.setState({
-            deleteModalOpen: !this.state.deleteModalOpen
-        });
+        this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
+        this.removeHandler = this.removeHandler.bind(this);
     }
 
     toggleRemoveModal() {
         this.setState({
             removeModalOpen: !this.state.removeModalOpen
         })
-    }
-
-    deleteHandler() {
-
     }
 
     removeHandler() {
@@ -36,13 +30,7 @@ class MyLibrary extends Component {
     render() {
         return (
             <React.Fragment>
-                <ConfirmActionModal isModalOpen={this.deleteModalOpen} 
-                    toggleModal={this.toggleDeleteModal} 
-                    submitHandler={this.deleteHandler}
-                    buttonText={'Delete'}>
-                    <p>Are you sure you want to delete this book and all its contents?</p>
-                </ConfirmActionModal>
-                <ConfirmActionModal isModalOpen={this.removeModalOpen} 
+                <ConfirmActionModal isModalOpen={this.state.removeModalOpen} 
                     toggleModal={this.toggleRemoveModal} 
                     submitHandler={this.removeHandler}
                     buttonText={'Remove'}>
@@ -65,7 +53,7 @@ class MyLibrary extends Component {
                     </div>
                     <div className="row">
                         <div className="col">
-                        
+                            <MyBooksTable />
                         </div>
                     </div>
                 </div>
@@ -73,3 +61,5 @@ class MyLibrary extends Component {
         );
     }
 }
+
+export default MyLibrary;

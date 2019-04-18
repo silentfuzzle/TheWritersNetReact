@@ -5,6 +5,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
+import MyLibrary from './pages/MyLibraryComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
 import { addLogin, postSignup } from '../redux/loginReducer';
@@ -64,6 +65,7 @@ class Main extends Component {
                 <Switch>
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
+                    <Route path="/mylibrary" component={MyLibrary} />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

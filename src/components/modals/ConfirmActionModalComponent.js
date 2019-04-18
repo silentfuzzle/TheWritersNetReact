@@ -1,20 +1,20 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, Button } from 'reactstrap';
+import { ModalBody, Button } from 'reactstrap';
+import ClosableModal from '../modals/ClosableModalComponent';
 
 function ConfirmActionModal(props) {
     return (
-        <Modal isOpen={props.isModalOpen} toggle={props.toggleModal}>
-            <ModalHeader toggle={props.toggleModal}>Confirm Action</ModalHeader>
+        <ClosableModal title={'Confirm Action'} isModalOpen={props.isModalOpen} toggleModal={props.toggleModal}>
             <ModalBody>
                 {props.children}
-                <div class="row justify-content-end">
-                    <div class="col-auto">
-                        <Button color="secondary" onClick={props.toggleModal}>Cancel</Button> 
-                        <Button color="danger" onClick={props.submitHandler}>{this.props.buttonText}</Button>
+                <div className="row justify-content-end">
+                    <div className="col-auto">
+                        <Button color="secondary" onClick={props.toggleModal} className="mr-1">Cancel</Button> 
+                        <Button color="danger" onClick={props.submitHandler}>{props.buttonText}</Button>
                     </div>
                 </div>
             </ModalBody>
-        </Modal>
+        </ClosableModal>
     );
 }
 
