@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Modal, ModalHeader, ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
+import { ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { required } from '../../utils/validators';
+import ClosableModal from '../modals/ClosableModalComponent';
+import UnclosableModal from '../modals/UnclosableModalComponent';
 
 class LoginModal extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class LoginModal extends Component {
     getDefaultState() {
         return {
             ...this.getDefaultErrors(),
+            loginLoading: false,
             errors: this.getDefaultErrors()
         };
     }
@@ -61,53 +64,91 @@ class LoginModal extends Component {
         });
 
         if (!error) {
-            console.log("Current State is: " + JSON.stringify(this.state));
-            alert("Current State is: " + JSON.stringify(this.state));
+            this.setState({
+                loginLoading: true
+            });
+
+            setTimeout(() => {
+                let userFound = false;
+
+                const existingUser = this.props.users.find(user => user.username === this.state.username);
+                if (existingUser) {
+                    if (existingUser.hashedpassword === this.state.password) {
+                        this.props.postLogin(existingUser);
+                        this.toggleModal();
+                        userFound = true;
+                    }
+                }
+
+                if (!userFound) {
+                    this.setState({
+                        loginLoading: false,
+                        errors: {
+                            ...this.getDefaultErrors(),
+                            password: 'Username and password combination not found.'
+                        }
+                    });
+                }
+            }, 2000);
         }
 
         event.preventDefault();
     }
 
-    render() {
+    renderForm() {
         return (
-            <Modal isOpen={this.props.isModalOpen} toggle={this.toggleModal}>
-                <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
-                <ModalBody>
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text"
-                                    id="username" 
-                                    name="username"
-                                    value={this.state.username}
-                                    invalid={this.state.errors.username !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.username}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" 
-                                    id="password" 
-                                    name="password"
-                                    value={this.state.password}
-                                    invalid={this.state.errors.password !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.password}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row className="justify-content-end">
-                            <Col xs="auto">
-                                <Button className="mr-1" onClick={this.toggleModal}>Cancel</Button>
-                                <Button type="submit" color="success">Login</Button>
-                            </Col>
-                        </FormGroup>
-                    </Form>
-                </ModalBody>
-            </Modal>
+            <ModalBody>
+                <Form onSubmit={this.handleSubmit}>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="username">Username</Label>
+                            <Input type="text"
+                                id="username" 
+                                name="username"
+                                value={this.state.username}
+                                invalid={this.state.errors.username !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.username}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="password">Password</Label>
+                            <Input type="password" 
+                                id="password" 
+                                name="password"
+                                value={this.state.password}
+                                invalid={this.state.errors.password !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.password}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row className="justify-content-end">
+                        <Col xs="auto">
+                            <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.loginLoading}>Cancel</Button>
+                            <Button type="submit" color="success" disabled={this.state.loginLoading}>Login</Button>
+                        </Col>
+                    </FormGroup>
+                </Form>
+            </ModalBody>
         );
+    }
+
+    render() {
+        const title = 'Login';
+        if (this.state.loginLoading) {
+            return (
+                <UnclosableModal title={title} isModalOpen={this.props.isModalOpen}>
+                    {this.renderForm()}
+                </UnclosableModal>
+            );
+        } else {
+            return (
+                <ClosableModal title={title} isModalOpen={this.props.isModalOpen} toggleModal={this.toggleModal}>
+                    {this.renderForm()}
+                </ClosableModal>
+            );
+        }
     }
 }
 

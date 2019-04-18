@@ -22,9 +22,11 @@ class Header extends Component {
     }
 
     render() {
-        let userOptions = <LoginOrSignup toggleSignupModal={this.props.toggleSignupModal} />
-        if (this.props.isLoggedIn) {
-            userOptions = <UserNavigator />
+        let userOptions = <LoginOrSignup toggleSignupModal={this.props.toggleSignupModal}
+            toggleLoginModal={this.props.toggleLoginModal} />
+        if (this.props.user) {
+            userOptions = <UserNavigator displayName={this.props.user.displayname}
+                postLogout={this.props.postLogout} />
         }
 
         return (

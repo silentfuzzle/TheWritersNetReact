@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Modal, ModalHeader, ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
+import { ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { minLength, maxLength, validEmail, validPassword, required } from '../../utils/validators';
+import ClosableModal from '../modals/ClosableModalComponent';
+import UnclosableModal from '../modals/UnclosableModalComponent';
 
 class SignupModal extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class SignupModal extends Component {
     getDefaultState() {
         return {
             ...this.getDefaultErrors(),
+            signupLoading: false,
             errors: this.getDefaultErrors()
         };
     }
@@ -84,77 +87,109 @@ class SignupModal extends Component {
         });
 
         if (!error) {
-            console.log("Current State is: " + JSON.stringify(this.state));
-            alert("Current State is: " + JSON.stringify(this.state));
+            this.setState({ signupLoading: true });
+
+            setTimeout(() => {
+                const existingUser = this.props.users.find(user => user.username === this.state.username);
+                if (existingUser) {
+                    this.setState({ 
+                        signupLoading: false,
+                        errors: {
+                            ...this.getDefaultErrors(),
+                            username: 'Username not allowed.'
+                        }
+                    })
+                } else {
+                    this.props.postSignup({ 
+                        username: this.state.username,
+                        email: this.state.email
+                     });
+                     this.toggleModal();
+                }
+            }, 2000);
         }
 
         event.preventDefault();
     }
 
-    render() {
+    renderForm() {
         return (
-            <Modal isOpen={this.props.isModalOpen} toggle={this.toggleModal}>
-                <ModalHeader toggle={this.toggleModal}>Signup</ModalHeader>
-                <ModalBody>
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text"
-                                    id="username" 
-                                    name="username"
-                                    value={this.state.username}
-                                    invalid={this.state.errors.username !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.username}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="email">Email</Label>
-                                <Input type="text"
-                                    id="email" 
-                                    name="email"
-                                    value={this.state.email}
-                                    invalid={this.state.errors.email !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.email}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" 
-                                    id="password" 
-                                    name="password"
-                                    value={this.state.password}
-                                    invalid={this.state.errors.password !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.password}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Col>
-                                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                                <Input type="password" 
-                                    id="confirmPassword" 
-                                    name="confirmPassword"
-                                    value={this.state.confirmPassword}
-                                    invalid={this.state.errors.confirmPassword !== ''}
-                                    onChange={this.handleChange} />
-                                <FormFeedback>{this.state.errors.confirmPassword}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row className="justify-content-end">
-                            <Col xs="auto">
-                                <Button className="mr-1" onClick={this.toggleModal}>Cancel</Button>
-                                <Button type="submit" color="success">Login</Button>
-                            </Col>
-                        </FormGroup>
-                    </Form>
-                </ModalBody>
-            </Modal>
+            <ModalBody>
+                <Form onSubmit={this.handleSubmit}>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="username">Username</Label>
+                            <Input type="text"
+                                id="username" 
+                                name="username"
+                                value={this.state.username}
+                                invalid={this.state.errors.username !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.username}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="email">Email</Label>
+                            <Input type="text"
+                                id="email" 
+                                name="email"
+                                value={this.state.email}
+                                invalid={this.state.errors.email !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.email}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="password">Password</Label>
+                            <Input type="password" 
+                                id="password" 
+                                name="password"
+                                value={this.state.password}
+                                invalid={this.state.errors.password !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.password}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Col>
+                            <Label htmlFor="confirmPassword">Confirm Password</Label>
+                            <Input type="password" 
+                                id="confirmPassword" 
+                                name="confirmPassword"
+                                value={this.state.confirmPassword}
+                                invalid={this.state.errors.confirmPassword !== ''}
+                                onChange={this.handleChange} />
+                            <FormFeedback>{this.state.errors.confirmPassword}</FormFeedback>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row className="justify-content-end">
+                        <Col xs="auto">
+                            <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.signupLoading}>Cancel</Button>
+                            <Button type="submit" color="success" disabled={this.state.signupLoading}>Login</Button>
+                        </Col>
+                    </FormGroup>
+                </Form>
+            </ModalBody>
         );
+    }
+
+    render() {
+        const title = 'Signup';
+        if (this.state.signupLoading) {
+            return (
+                <UnclosableModal title={title} isModalOpen={this.props.isModalOpen}>
+                    {this.renderForm()}
+                </UnclosableModal>
+            )
+        } else {
+            return (
+                <ClosableModal title={title} isModalOpen={this.props.isModalOpen} toggleModal={this.toggleModal}>
+                    {this.renderForm()}
+                </ClosableModal>
+            );
+        }
     }
 }
 

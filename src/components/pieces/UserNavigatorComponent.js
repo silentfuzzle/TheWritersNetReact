@@ -22,7 +22,7 @@ class UserNavigator extends Component {
         return (
             <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
                 <DropdownToggle caret color="success">
-                    Hello, Username!
+                    Hello, {this.props.displayName}!
                 </DropdownToggle>
                 <DropdownMenu>
                     <DropdownItem>My Library</DropdownItem>
@@ -30,7 +30,7 @@ class UserNavigator extends Component {
                     <DropdownItem>Edit Profile</DropdownItem>
                     <DropdownItem>Settings</DropdownItem>
                     <DropdownItem divider />
-                    <DropdownItem>Logout</DropdownItem>
+                    <DropdownItem onClick={this.props.postLogout}>Logout</DropdownItem>
                 </DropdownMenu>
             </ButtonDropdown>
         );

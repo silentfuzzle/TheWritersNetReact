@@ -6,18 +6,19 @@ import Footer from './FooterComponent';
 import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
 import SignupModal from './modals/SignupModalComponent';
-import { postLogin, postLogout, postSignup } from '../redux/loginReducer';
+import LoginModal from './modals/LoginModalComponent';
+import { addLogin, postSignup } from '../redux/loginReducer';
 
 const mapStateToProps = state => {
-    // With an actual database, this method would not be necessary
     return {
-        login: state.login
+        login: state.login,
+        users: state.users
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    postLogin: (username, password) => dispatch(postLogin(username, password)),
-    postLogout: () => dispatch(postLogout()),
+    postLogout: () => dispatch(addLogin(null)),
+    postLogin: (user) => dispatch(addLogin(user)),
     postSignup: (user) => dispatch(postSignup(user))
 });
 
@@ -26,10 +27,12 @@ class Main extends Component {
         super(props);
 
         this.state = {
-            isSignupOpen: false
+            isSignupOpen: false,
+            isLoginOpen: false
         };
 
         this.toggleSignupModal = this.toggleSignupModal.bind(this);
+        this.toggleLoginModal = this.toggleLoginModal.bind(this);
     }
 
     toggleSignupModal() {
@@ -38,11 +41,26 @@ class Main extends Component {
         });
     }
 
+    toggleLoginModal() {
+        this.setState({
+            isLoginOpen: !this.state.isLoginOpen
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                <SignupModal isModalOpen={this.state.isSignupOpen} toggleModal={this.toggleSignupModal} />
-                <Header isLoggedIn={false} toggleSignupModal={this.toggleSignupModal} />
+                <SignupModal isModalOpen={this.state.isSignupOpen} 
+                    toggleModal={this.toggleSignupModal} 
+                    postSignup={this.props.postSignup}
+                    users={this.props.users} />
+                <LoginModal isModalOpen={this.state.isLoginOpen}
+                    toggleModal={this.toggleLoginModal}
+                    postLogin={this.props.postLogin}
+                    users={this.props.users} />
+                <Header user={this.props.login.user} 
+                    toggleSignupModal={this.toggleSignupModal}
+                    toggleLoginModal={this.toggleLoginModal} />
                 <Switch>
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />

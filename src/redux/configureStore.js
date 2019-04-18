@@ -5,6 +5,7 @@ import { Permissions } from './permissionsReducer';
 import { PTypes } from './permissionTypesReducer';
 import { Reviews } from './reviewsReducer';
 import { Users } from './usersReducer';
+import { Login } from './loginReducer';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -13,7 +14,8 @@ export const ConfigureStore = () => {
             permissions: Permissions,
             permissionTypes: PTypes,
             reviews: Reviews,
-            users: Users
+            users: Users,
+            login: Login
         }),
         applyMiddleware(thunk)
     );
