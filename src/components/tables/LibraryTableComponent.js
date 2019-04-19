@@ -74,41 +74,51 @@ class LibraryTable extends Component {
     fetchBooks() {
         // This method would fetch the books from a database in the required form
         // It may also handle filtering, sorting, and pagination if the database is very large
-        let books = this.props.books.map(book => {
-            const authors = this.props.permissions
-                .filter(p => 
-                    p.bookid === book.id && p.permissionid < 3)
-                .sort((a1, a2) => 
-                    (a1.permissionid > a2.permissionid) ? 1 : ((a2.permissionid > a1.permissionid) ? -1 : 0))
-                .map(permission => {
-                    let author = this.props.users.find(user => user.id === permission.userid);
-                    return {
-                        id: author.id,
-                        name: author.displayname
-                    };
-                });
-    
-            const reviews = this.props.reviews.filter(review => review.bookid === book.id);
-            let rating = reviews.reduce((total, review) => total += review.rating, 0);
-            rating = Math.round(rating / reviews.length * 100) / 100;
-    
-            return {
-                id: book.id,
-                title: book.title,
-                subtitle: book.subtitle,
-                authors: authors,
-                length: book.length,
-                rating: rating
+        this.setState({
+            books: {
+                isLoading: true,
+                errMess: '',
+                books: []
             }
         });
 
-        this.setState({
-            books: {
-                isLoading: false,
-                errMess: '',
-                books: books
-            }
-        });
+        setTimeout(() => {
+            let books = this.props.books.map(book => {
+                const authors = this.props.permissions
+                    .filter(p => 
+                        p.bookid === book.id && p.permissionid < 3)
+                    .sort((a1, a2) => 
+                        (a1.permissionid > a2.permissionid) ? 1 : ((a2.permissionid > a1.permissionid) ? -1 : 0))
+                    .map(permission => {
+                        let author = this.props.users.find(user => user.id === permission.userid);
+                        return {
+                            id: author.id,
+                            name: author.displayname
+                        };
+                    });
+        
+                const reviews = this.props.reviews.filter(review => review.bookid === book.id);
+                let rating = reviews.reduce((total, review) => total += review.rating, 0);
+                rating = Math.round(rating / reviews.length * 100) / 100;
+        
+                return {
+                    id: book.id,
+                    title: book.title,
+                    subtitle: book.subtitle,
+                    authors: authors,
+                    length: book.length,
+                    rating: rating
+                }
+            });
+
+            this.setState({
+                books: {
+                    isLoading: false,
+                    errMess: '',
+                    books: books
+                }
+            });
+        }, 2000);
     }
 
     getBooks() {

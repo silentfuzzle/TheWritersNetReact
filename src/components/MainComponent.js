@@ -33,14 +33,21 @@ class Main extends Component {
         this.state = {
             isSignupOpen: false,
             isLoginOpen: false,
-            isReviewOpen: false,
-            selectedReview: 0
+            reviewModal: {
+                isReviewOpen: false,
+                loadingReview: false,
+                errMess: '',
+                initialState: {
+                    'rating': '1',
+                    'title': '',
+                    'review': ''
+                }
+            }
         };
 
         this.toggleSignupModal = this.toggleSignupModal.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
         this.toggleReviewModal = this.toggleReviewModal.bind(this);
-        this.getInitialReviewState = this.getInitialReviewState.bind(this);
     }
 
     toggleSignupModal() {
@@ -57,25 +64,35 @@ class Main extends Component {
 
     toggleReviewModal(reviewid = 0) {
         this.setState({
-            isReviewOpen: !this.state.isReviewOpen,
-            selectedReview: reviewid
+            reviewModal: {
+                isReviewOpen: !this.state.reviewModal.isReviewOpen,
+                loadingReview: reviewid !== 0,
+                errMess: '',
+                initialState: {
+                    'rating': '1',
+                    'title': '',
+                    'review': ''
+                }
+            }
         });
-    }
 
-    getInitialReviewState() {
-        const review = this.props.reviews.find(r => r.id === this.state.selectedReview);
-        if (this.state.selectedReview !== 0) {
-            return {
-                'rating': review.rating,
-                'title': review.title,
-                'review': review.review
-            };
-        } else {
-            return {
-                'rating': '1',
-                'title': '',
-                'review': ''
-            };
+        if (reviewid !== 0) {
+            // Database call here
+            setTimeout(() => {
+                const review = this.props.reviews.find(r => r.id === reviewid);
+
+                this.setState({
+                    reviewModal: {
+                        ...this.state.reviewModal,
+                        loadingReview: false,
+                        initialState: {
+                            'rating': review.rating,
+                            'title': review.title,
+                            'review': review.review
+                        }
+                    }
+                })
+            }, 2000);
         }
     }
 
@@ -90,9 +107,10 @@ class Main extends Component {
                     toggleModal={this.toggleLoginModal}
                     postLogin={this.props.postLogin}
                     users={this.props.users} />
-                <ReviewModal isModalOpen={this.state.isReviewOpen}
+                <ReviewModal isModalOpen={this.state.reviewModal.isReviewOpen}
                     toggleModal={this.toggleReviewModal}
-                    getInitialState={this.getInitialReviewState} />
+                    reviewLoading={this.state.reviewModal.loadingReview}
+                    initialState={this.state.reviewModal.initialState} />
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
                     toggleLoginModal={this.toggleLoginModal} />

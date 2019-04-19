@@ -78,45 +78,55 @@ class OpenedBooksTable extends Component {
     fetchBooks() {
         // This method would fetch the books from a database in the required form
         // It may also handle filtering, sorting, and pagination if the database is very large
-        let books = this.props.openedBooks.filter(book => {
-            return book.userid === this.props.user.id;
-        })
-        .map(book => {
-            const title = this.props.books.find(b => {
-                    return b.id === book.bookid;
-                });
-
-            const allPages = this.props.pages.filter(page => page.bookid === book.bookid);
-            const progress = book.visitedpages.length / allPages.length * 100;
-
-            const review = this.props.reviews.find(r => {
-                return r.userid === this.props.user.id && r.bookid === book.bookid;
-            });
-
-            let rating = "N/A";
-            let reviewid = 0;
-            if (review) {
-                rating = review.rating + "/5";
-                reviewid = review.id;
-            }
-            
-            return {
-                id: book.bookid,
-                reviewid: reviewid,
-                title: title.title,
-                progress: progress,
-                rating: rating,
-                currpage: book.currpage
-            };
-        });
-
         this.setState({
             books: {
-                isLoading: false,
+                isLoading: true,
                 errMess: '',
-                books: books
+                books: []
             }
         });
+        
+        setTimeout(() => {
+            let books = this.props.openedBooks.filter(book => {
+                return book.userid === this.props.user.id;
+            })
+            .map(book => {
+                const title = this.props.books.find(b => {
+                        return b.id === book.bookid;
+                    });
+    
+                const allPages = this.props.pages.filter(page => page.bookid === book.bookid);
+                const progress = book.visitedpages.length / allPages.length * 100;
+    
+                const review = this.props.reviews.find(r => {
+                    return r.userid === this.props.user.id && r.bookid === book.bookid;
+                });
+    
+                let rating = "N/A";
+                let reviewid = 0;
+                if (review) {
+                    rating = review.rating + "/5";
+                    reviewid = review.id;
+                }
+                
+                return {
+                    id: book.bookid,
+                    reviewid: reviewid,
+                    title: title.title,
+                    progress: progress,
+                    rating: rating,
+                    currpage: book.currpage
+                };
+            });
+    
+            this.setState({
+                books: {
+                    isLoading: false,
+                    errMess: '',
+                    books: books
+                }
+            });
+        }, 2000);
     }
 
     getBooks() {

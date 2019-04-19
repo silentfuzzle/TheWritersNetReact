@@ -11,14 +11,14 @@ function MyLibrary(props) {
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        <h1>MyLibrary</h1>
+                        <h1>My Library</h1>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-auto">
+                    <div className="col-12">
                         <h2>My Books</h2>
                     </div>
-                    <div className="col">
+                    <div className="col-12">
                         <Link to={'/book/edit'}>Create New Book</Link>
                     </div>
                 </div>

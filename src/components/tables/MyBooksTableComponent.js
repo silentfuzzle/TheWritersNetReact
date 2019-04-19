@@ -71,40 +71,50 @@ class MyBooksTable extends Component {
     fetchBooks() {
         // This method would fetch the books from a database in the required form
         // It may also handle filtering, sorting, and pagination if the database is very large
-        let books = this.props.books.filter(book => {
-            const permission = this.props.permissions.find(permission => {
-                return permission.userid === this.props.user.id &&
-                permission.bookid === book.id &&
-                permission.permissionid < 3;
-            });
-
-            return permission;
-        })
-        .map(book => {
-            const permission = this.props.permissions.find(permission => {
-                return permission.userid === this.props.user.id &&
-                permission.bookid === book.id;
-            });
-
-            const type = this.props.permissionTypes.find(type => {
-                return type.id === permission.permissionid
-            });
-
-            return {
-                id: book.id,
-                startpageid: book.startpageid,
-                title: book.title,
-                authorship: type.name
-            }
-        });
-
         this.setState({
             books: {
-                isLoading: false,
+                isLoading: true,
                 errMess: '',
-                books: books
+                books: []
             }
         });
+        
+        setTimeout(() => {
+            let books = this.props.books.filter(book => {
+                const permission = this.props.permissions.find(permission => {
+                    return permission.userid === this.props.user.id &&
+                    permission.bookid === book.id &&
+                    permission.permissionid < 3;
+                });
+    
+                return permission;
+            })
+            .map(book => {
+                const permission = this.props.permissions.find(permission => {
+                    return permission.userid === this.props.user.id &&
+                    permission.bookid === book.id;
+                });
+    
+                const type = this.props.permissionTypes.find(type => {
+                    return type.id === permission.permissionid
+                });
+    
+                return {
+                    id: book.id,
+                    startpageid: book.startpageid,
+                    title: book.title,
+                    authorship: type.name
+                }
+            });
+    
+            this.setState({
+                books: {
+                    isLoading: false,
+                    errMess: '',
+                    books: books
+                }
+            });
+        }, 2000);
     }
 
     getBooks() {

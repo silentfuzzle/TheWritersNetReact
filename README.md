@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## TODO
+
+* Implement updating and creating reviews
+* Implement deleting books from Opened Books table
+* Implement deleting books from library
+* Explore Higher Order Components for reducing duplicated code
+* Handle error messages
+
 ## Available Scripts
 
 In the project directory, you can run:
