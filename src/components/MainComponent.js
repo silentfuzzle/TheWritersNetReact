@@ -8,12 +8,15 @@ import Library from './pages/LibraryComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
+import ReviewModal from './modals/ReviewModalComponent';
 import { addLogin, postSignup } from '../redux/loginReducer';
 
 const mapStateToProps = state => {
+    // With an actual database, users and reviews would not be necessary here
     return {
         login: state.login,
-        users: state.users
+        users: state.users,
+        reviews: state.reviews
     };
 };
 
@@ -29,11 +32,15 @@ class Main extends Component {
 
         this.state = {
             isSignupOpen: false,
-            isLoginOpen: false
+            isLoginOpen: false,
+            isReviewOpen: false,
+            selectedReview: 0
         };
 
         this.toggleSignupModal = this.toggleSignupModal.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
+        this.toggleReviewModal = this.toggleReviewModal.bind(this);
+        this.getInitialReviewState = this.getInitialReviewState.bind(this);
     }
 
     toggleSignupModal() {
@@ -48,6 +55,30 @@ class Main extends Component {
         });
     }
 
+    toggleReviewModal(reviewid = 0) {
+        this.setState({
+            isReviewOpen: !this.state.isReviewOpen,
+            selectedReview: reviewid
+        });
+    }
+
+    getInitialReviewState() {
+        const review = this.props.reviews.find(r => r.id === this.state.selectedReview);
+        if (this.state.selectedReview !== 0) {
+            return {
+                'rating': review.rating,
+                'title': review.title,
+                'review': review.review
+            };
+        } else {
+            return {
+                'rating': '1',
+                'title': '',
+                'review': ''
+            };
+        }
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -59,13 +90,16 @@ class Main extends Component {
                     toggleModal={this.toggleLoginModal}
                     postLogin={this.props.postLogin}
                     users={this.props.users} />
+                <ReviewModal isModalOpen={this.state.isReviewOpen}
+                    toggleModal={this.toggleReviewModal}
+                    getInitialState={this.getInitialReviewState} />
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
                     toggleLoginModal={this.toggleLoginModal} />
                 <Switch>
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
-                    <Route path="/mylibrary" component={MyLibrary} />
+                    <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

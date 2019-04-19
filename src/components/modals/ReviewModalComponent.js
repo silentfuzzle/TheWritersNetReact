@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, ModalHeader, ModalBody, Label, Row, Col, Button } from 'reactstrap';
+import { ModalBody, Label, Row, Col, Button } from 'reactstrap';
 import { Control, LocalForm } from 'react-redux-form';
+import ClosableModal from '../modals/ClosableModalComponent';
 
 class ReviewModal extends Component {
     constructor(props) {
@@ -16,15 +17,14 @@ class ReviewModal extends Component {
 
     render() {
         return (
-            <Modal isOpen={this.props.isModalOpen} toggle={this.toggleModal}>
-                <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+            <ClosableModal title={'Review Book'} isModalOpen={this.props.isModalOpen} toggleModal={this.props.toggleModal}>
                 <ModalBody>
-                    <LocalForm onSubmit={this.handleSubmit}>
+                    <LocalForm onSubmit={this.handleSubmit} initialState={this.props.getInitialState}>
                         <Row className="form-group">
                             <Col>
                                 <Label htmlFor="rating">Rating</Label>
                                 <Control.select model=".rating" name="rating" 
-                                        className="form-control" defaultValue="1">
+                                        className="form-control">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -56,7 +56,7 @@ class ReviewModal extends Component {
                         </Row>
                     </LocalForm>
                 </ModalBody>
-            </Modal>
+            </ClosableModal>
         );
     }
 }

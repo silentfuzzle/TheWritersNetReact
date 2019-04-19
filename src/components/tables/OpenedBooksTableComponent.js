@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Progress } from 'reactstrap';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
@@ -10,18 +11,19 @@ const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
     return {
         books: state.books,
-        permissions: state.permissions,
-        permissionTypes: state.permissionTypes,
+        openedBooks: state.openedBooks,
+        pages: state.pages,
+        reviews: state.reviews,
         user: state.login.user
-    }
+    };
 }
 
-class MyBooksTable extends Component {
+class OpenedBooksTable extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            deleteModalOpen: false,
+            removeModalOpen: false,
             selectedBook: 0,
             books: {
                 isLoading: false,
@@ -41,61 +43,71 @@ class MyBooksTable extends Component {
             },
             {
                 id: 2,
-                orderby: 'authorship',
-                title: 'Authorship'
+                orderby: 'progress',
+                title: 'Percentage Read'
+            },
+            {
+                id: 3,
+                orderby: 'rating',
+                title: 'My Rating'
             }
         ];
 
-        this.anchor = 'my-books';
+        this.anchor = 'opened-books';
 
-        this.toggleDeleteModal = this.toggleDeleteModal.bind(this);
-        this.deleteHandler = this.deleteHandler.bind(this);
+        this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
+        this.removeHandler = this.removeHandler.bind(this);
         this.setSort = this.setSort.bind(this);
         this.setPage = this.setPage.bind(this);
         this.renderHead = this.renderHead.bind(this);
         this.renderBody = this.renderBody.bind(this);
     }
 
-    toggleDeleteModal(bookid = 0) {
+    toggleRemoveModal(bookid = 0) {
         this.setState({
-            deleteModalOpen: !this.state.deleteModalOpen,
+            removeModalOpen: !this.state.removeModalOpen,
             selectedBook: bookid
-        });
+        })
     }
 
-    deleteHandler() {
+    removeHandler() {
         console.log(this.state.selectedBook);
-        this.toggleDeleteModal();
+        this.toggleRemoveModal();
     }
 
     fetchBooks() {
         // This method would fetch the books from a database in the required form
         // It may also handle filtering, sorting, and pagination if the database is very large
-        let books = this.props.books.filter(book => {
-            const permission = this.props.permissions.find(permission => {
-                return permission.userid === this.props.user.id &&
-                permission.bookid === book.id &&
-                permission.permissionid < 3;
-            });
-
-            return permission;
+        let books = this.props.openedBooks.filter(book => {
+            return book.userid === this.props.user.id;
         })
         .map(book => {
-            const permission = this.props.permissions.find(permission => {
-                return permission.userid === this.props.user.id &&
-                permission.bookid === book.id;
+            const title = this.props.books.find(b => {
+                    return b.id === book.bookid;
+                });
+
+            const allPages = this.props.pages.filter(page => page.bookid === book.bookid);
+            const progress = book.visitedpages.length / allPages.length * 100;
+
+            const review = this.props.reviews.find(r => {
+                return r.userid === this.props.user.id && r.bookid === book.bookid;
             });
 
-            const type = this.props.permissionTypes.find(type => {
-                return type.id === permission.permissionid
-            });
-
-            return {
-                id: book.id,
-                startpageid: book.startpageid,
-                title: book.title,
-                authorship: type.name
+            let rating = "N/A";
+            let reviewid = 0;
+            if (review) {
+                rating = review.rating + "/5";
+                reviewid = review.id;
             }
+            
+            return {
+                id: book.bookid,
+                reviewid: reviewid,
+                title: title.title,
+                progress: progress,
+                rating: rating,
+                currpage: book.currpage
+            };
         });
 
         this.setState({
@@ -176,11 +188,11 @@ class MyBooksTable extends Component {
                     return (
                         <tr key={book.id}>
                             <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
-                            <td>{book.authorship}</td>
+                            <td><Progress value={book.progress} color="dark" /></td>
+                            <td><a href={'#' + this.anchor} onClick={() => this.props.toggleReviewModal(book.reviewid)}>{book.rating}</a></td>
                             <td>
-                                <Link to={`book/${book.id}/edit`}><span className="fa fa-pencil" title="Edit"></span> </Link>
-                                <Link to={`page/${book.startpageid}`}><span className="fa fa-eye" title="View"></span> </Link>
-                                <a href={'#' + this.anchor} onClick={() => this.toggleDeleteModal(book.id)}><span className="fa fa-remove" title="Delete"></span></a>
+                                <Link to={`page/${book.currpage}`}><span className="fa fa-eye" title="Open"></span> </Link>
+                                <a href={'#' + this.anchor} onClick={() => this.toggleRemoveModal(book.id)}><span className="fa fa-remove" title="Remove"></span></a>
                             </td>
                         </tr>
                     );
@@ -210,11 +222,11 @@ class MyBooksTable extends Component {
 
         return (
             <React.Fragment>
-                <ConfirmActionModal isModalOpen={this.state.deleteModalOpen} 
-                    toggleModal={this.toggleDeleteModal} 
-                    submitHandler={this.deleteHandler}
-                    buttonText={'Delete'}>
-                    <p>Are you sure you want to delete this book and all its contents?</p>
+                <ConfirmActionModal isModalOpen={this.state.removeModalOpen} 
+                    toggleModal={this.toggleRemoveModal} 
+                    submitHandler={this.removeHandler}
+                    buttonText={'Remove'}>
+                    <p>Are you sure you want to remove this book from your library? You will lose your progress.</p>
                 </ConfirmActionModal>
                 <TableContainer columns={this.renderColumns} 
                     thead={this.renderHead} 
@@ -229,4 +241,4 @@ class MyBooksTable extends Component {
     }
 }
 
-export default connect(mapStateToProps)(MyBooksTable);
+export default connect(mapStateToProps)(OpenedBooksTable);
