@@ -123,6 +123,7 @@ class SignupModal extends Component {
                                 id="username" 
                                 name="username"
                                 value={this.state.username}
+                                disabled={this.state.signupLoading}
                                 invalid={this.state.errors.username !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.username}</FormFeedback>
@@ -135,6 +136,7 @@ class SignupModal extends Component {
                                 id="email" 
                                 name="email"
                                 value={this.state.email}
+                                disabled={this.state.signupLoading}
                                 invalid={this.state.errors.email !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.email}</FormFeedback>
@@ -147,6 +149,7 @@ class SignupModal extends Component {
                                 id="password" 
                                 name="password"
                                 value={this.state.password}
+                                disabled={this.state.signupLoading}
                                 invalid={this.state.errors.password !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.password}</FormFeedback>
@@ -159,6 +162,7 @@ class SignupModal extends Component {
                                 id="confirmPassword" 
                                 name="confirmPassword"
                                 value={this.state.confirmPassword}
+                                disabled={this.state.signupLoading}
                                 invalid={this.state.errors.confirmPassword !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.confirmPassword}</FormFeedback>

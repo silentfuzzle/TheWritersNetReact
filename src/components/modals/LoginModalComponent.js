@@ -106,6 +106,7 @@ class LoginModal extends Component {
                                 id="username" 
                                 name="username"
                                 value={this.state.username}
+                                disabled={this.state.loginLoading}
                                 invalid={this.state.errors.username !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.username}</FormFeedback>
@@ -118,6 +119,7 @@ class LoginModal extends Component {
                                 id="password" 
                                 name="password"
                                 value={this.state.password}
+                                disabled={this.state.loginLoading}
                                 invalid={this.state.errors.password !== ''}
                                 onChange={this.handleChange} />
                             <FormFeedback>{this.state.errors.password}</FormFeedback>
