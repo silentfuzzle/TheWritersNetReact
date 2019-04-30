@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
 import MyLibrary from './pages/MyLibraryComponent';
+import ViewBook from './pages/ViewBookComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
+import HelpModal from './modals/HelpModalComponent';
 import ReviewModal from './modals/ReviewModalComponent';
 import { addLogin, postSignup } from '../redux/loginReducer';
 
@@ -33,6 +36,7 @@ class Main extends Component {
         this.state = {
             isSignupOpen: false,
             isLoginOpen: false,
+            isMarkdownOpen: false,
             reviewModal: {
                 isReviewOpen: false,
                 loadingReview: false,
@@ -47,6 +51,7 @@ class Main extends Component {
 
         this.toggleSignupModal = this.toggleSignupModal.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
+        this.toggleMarkdownModal = this.toggleMarkdownModal.bind(this);
         this.toggleReviewModal = this.toggleReviewModal.bind(this);
     }
 
@@ -62,7 +67,14 @@ class Main extends Component {
         });
     }
 
+    toggleMarkdownModal() {
+        this.setState({
+            isMarkdownOpen: !this.state.isMarkdownOpen
+        });
+    }
+
     toggleReviewModal(reviewid = 0) {
+        console.log(reviewid);
         this.setState({
             reviewModal: {
                 isReviewOpen: !this.state.reviewModal.isReviewOpen,
@@ -111,6 +123,13 @@ class Main extends Component {
                     toggleModal={this.toggleReviewModal}
                     reviewLoading={this.state.reviewModal.loadingReview}
                     initialState={this.state.reviewModal.initialState} />
+                <HelpModal title={'Markdown Helper'}
+                    isModalOpen={this.state.isMarkdownOpen}
+                    toggleModal={this.toggleMarkdownModal}>
+                    <ModalBody>
+                        <p>Insert markdown instructions here.</p>
+                    </ModalBody>
+                </HelpModal>
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
                     toggleLoginModal={this.toggleLoginModal} />
@@ -118,6 +137,7 @@ class Main extends Component {
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
+                    <Route path="/book/:id" render={() => <ViewBook bookid={2} toggleReviewModal={this.toggleReviewModal} /> } />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

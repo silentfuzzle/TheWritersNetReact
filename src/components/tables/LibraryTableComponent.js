@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import { calculatePageSlice } from '../../utils/pagination';
+import { getAuthors, getRating } from '../../utils/functions';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -84,22 +85,10 @@ class LibraryTable extends Component {
 
         setTimeout(() => {
             let books = this.props.books.map(book => {
-                const authors = this.props.permissions
-                    .filter(p => 
-                        p.bookid === book.id && p.permissionid < 3)
-                    .sort((a1, a2) => 
-                        (a1.permissionid > a2.permissionid) ? 1 : ((a2.permissionid > a1.permissionid) ? -1 : 0))
-                    .map(permission => {
-                        let author = this.props.users.find(user => user.id === permission.userid);
-                        return {
-                            id: author.id,
-                            name: author.displayname
-                        };
-                    });
+                const authors = getAuthors(this.props.permissions, this.props.users, book);
         
                 const reviews = this.props.reviews.filter(review => review.bookid === book.id);
-                let rating = reviews.reduce((total, review) => total += review.rating, 0);
-                rating = Math.round(rating / reviews.length * 100) / 100;
+                let rating = getRating(reviews);
         
                 return {
                     id: book.id,
