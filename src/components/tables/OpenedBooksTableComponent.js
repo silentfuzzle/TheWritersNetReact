@@ -6,7 +6,7 @@ import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
-import { findUserReview } from '../../utils/functions';
+import { findUserReview, getProgress } from '../../utils/functions';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -97,7 +97,7 @@ class OpenedBooksTable extends Component {
                     });
     
                 const allPages = this.props.pages.filter(page => page.bookid === book.bookid);
-                const progress = book.visitedpages.length / allPages.length * 100;
+                const progress = getProgress(book.visitedpages.length, allPages.length);
     
                 const review = findUserReview(this.props.reviews, 
                     this.props.user.id, book.bookid);

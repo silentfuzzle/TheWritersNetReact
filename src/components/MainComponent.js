@@ -109,6 +109,15 @@ class Main extends Component {
     }
 
     render() {
+        const BookFromId = ({match}) => {
+            return (
+                <ViewBook 
+                    bookid={parseInt(match.params.id, 10)} 
+                    toggleReviewModal={this.toggleReviewModal} 
+                    />
+            );
+        };
+
         return (
             <React.Fragment>
                 <SignupModal isModalOpen={this.state.isSignupOpen} 
@@ -137,7 +146,7 @@ class Main extends Component {
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
-                    <Route path="/book/:id" render={() => <ViewBook bookid={2} toggleReviewModal={this.toggleReviewModal} /> } />
+                    <Route path="/book/:id" component={BookFromId} />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

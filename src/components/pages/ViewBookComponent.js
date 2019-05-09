@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Progress, Button } from 'reactstrap';
+import ReviewsList from '../pieces/ReviewsListComponent';
+import { calculatePageSlice } from '../../utils/pagination';
 import { getAuthors, getRating, findUserReview } from '../../utils/functions';
 
 const mapStateToProps = state => {
@@ -32,8 +34,13 @@ class ViewBook extends Component {
                     length: 0,
                     description: ''}
             },
-            reviews: []
+            reviews: {
+                reviews: [],
+                page: 1
+            }
         };
+
+        this.anchor = 'reviews';
     }
 
     fetchBook() {
@@ -48,7 +55,16 @@ class ViewBook extends Component {
         setTimeout(() => {
             const book = this.props.books.find(book => book.id === this.props.bookid);
             const authors = getAuthors(this.props.permissions, this.props.users, book);
-            const reviews = this.props.reviews.filter(review => review.bookid === book.id);
+            const reviews = this.props.reviews
+                .filter(review => review.bookid === book.id)
+                .map(review => {
+                    const author = this.props.users.find(u => u.id === review.userid);
+
+                    return {
+                        ...review,
+                        author: author.displayname
+                    }
+                });
             const rating = getRating(reviews);
 
             let reviewid = 0;
@@ -82,9 +98,21 @@ class ViewBook extends Component {
                         description: book.description
                     }
                 },
-                reviews: reviews
+                reviews: {
+                    reviews: reviews,
+                    page: 1
+                }
             });
         }, 2000);
+    }
+
+    setPage(page) {
+        this.setState({
+            reviews: {
+                ...this.state.reviews,
+                page: page
+            }
+        });
     }
 
     componentDidMount() {
@@ -107,8 +135,10 @@ class ViewBook extends Component {
         const authors = this.state.book.book.authors.map(author => {
             let separator = '';
             if (numAuthors > 1) {
+                if (i < numAuthors - 1 && numAuthors > 2)
+                    separator += ',';
                 if (i < numAuthors - 1)
-                    separator = ', ';
+                    separator += ' ';
                 if (i === numAuthors - 2)
                     separator += 'and ';
                 i++;
@@ -125,7 +155,10 @@ class ViewBook extends Component {
 
         const dtClass = "col-2";
         const book = this.state.book.book;
-        const numReviews = this.state.reviews.filter(r => r.review !== '').length;
+        
+        let reviews = this.state.reviews.reviews.filter(r => r.review !== '');
+        const numReviews = reviews.length;
+        reviews = reviews.slice(...calculatePageSlice(this.state.reviews.page));
 
         return (
             <div className="container">
@@ -141,7 +174,7 @@ class ViewBook extends Component {
                     <dd className="col-3"><Progress value={book.length} color="dark" /></dd>
                     <div className="w-100"></div>
                     <dt className={dtClass}>Rating:</dt>
-                    <dd className="col-10">{book.rating}/5 (<a href="#reviews">{numReviews} Reviews</a>, {this.state.reviews.length} Ratings)</dd>
+                    <dd className="col-10">{book.rating}/5 (<a href="#reviews">{numReviews} Reviews</a>, {this.state.reviews.reviews.length} Ratings)</dd>
                 </dl>
                 <div className="row">
                     <div className="col">
@@ -155,12 +188,19 @@ class ViewBook extends Component {
                 </div>
                 <div className="row justify-content-between">
                     <div className="col-auto">
-                        <h2 id="reviews">{numReviews} Reviews</h2>
+                        <h2 id={this.anchor}>{numReviews} Reviews</h2>
                     </div>
                     <div className="col-auto">
                         <Button color="success" onClick={() => this.props.toggleReviewModal(book.reviewid)}>Write Review</Button>
                     </div>
                 </div>
+                <ReviewsList 
+                    reviews={reviews}
+                    anchor={'#' + this.anchor}
+                    setPage={(page) => this.setPage(page)}
+                    currPage={this.state.reviews.page}
+                    totalItems={numReviews}
+                    />
             </div>
         );
     }

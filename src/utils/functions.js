@@ -25,3 +25,15 @@ export const findUserReview = (reviews, userid, bookid) => {
         return r.userid === userid && r.bookid === bookid;
     });
 }
+
+export const formatTimeStamp = (timestamp) => {
+    return new Intl.DateTimeFormat('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: '2-digit' 
+        }).format(new Date(Date.parse(timestamp)));
+}
+
+export const getProgress = (visitedPages, totalPages) => {
+    return visitedPages / totalPages * 100;
+}
