@@ -26,7 +26,7 @@ function PaginationControls(props) {
             </React.Fragment>
         );
     }
-    if (props.currPage !== lastPage) {
+    if (props.currPage !== lastPage && lastPage > 0) {
         nextControls = (
             <React.Fragment>
                 <PaginationItem>

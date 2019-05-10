@@ -8,11 +8,19 @@ function ReviewsList(props) {
     const labelClass = 'col-5 col-md-3 col-lg-2';
 
     const reviews = props.reviews.map(review => {
+        let bookname = (<div></div>);
+        if (review.bookname) {
+            bookname = (
+                <div className="lead"><strong><Link to={`/book/${review.bookid}`}>{review.bookname}</Link></strong></div>
+            );
+        }
+
         return (
             <React.Fragment key={review.id}>
                 <div className="row">
-                    <div className="col-12">
-                        <h3>{review.title}</h3>
+                    <div className="col">
+                        {bookname}
+                        <div className="lead">{review.title}</div>
                     </div>
                 </div>
                 <dl className="row">

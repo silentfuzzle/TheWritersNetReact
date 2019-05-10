@@ -37,3 +37,21 @@ export const formatTimeStamp = (timestamp) => {
 export const getProgress = (visitedPages, totalPages) => {
     return visitedPages / totalPages * 100;
 }
+
+export const orderBooks = (books, orderby, orderasc) => {
+    if (orderby !== '') {
+        books = books.sort((a, b) => {
+            if (orderby === 'authors') {
+                return (a.authors[0].name > b.authors[0].name) ? 1 : ((b.authors[0].name > a.authors[0].name) ? -1 : 0);
+            } else {
+                return (a[orderby] > b[orderby]) ? 1 : ((b[orderby] > a[orderby]) ? -1 : 0);
+            }
+        });
+
+        if (!orderasc) {
+            books = books.reverse();
+        }
+    }
+
+    return books;
+}

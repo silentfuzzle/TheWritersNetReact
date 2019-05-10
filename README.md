@@ -2,7 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
-* Open selected book id instead of always book with id 2
+* Allow users to use markdown in reviews
+* Allow users to use markdown in profile
 * Implement updating and creating reviews
 * Implement deleting books from Opened Books table
 * Implement deleting books from library

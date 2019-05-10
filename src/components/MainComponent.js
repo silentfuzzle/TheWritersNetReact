@@ -8,6 +8,7 @@ import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
+import ViewProfile from './pages/ViewProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
 import HelpModal from './modals/HelpModalComponent';
@@ -118,6 +119,12 @@ class Main extends Component {
             );
         };
 
+        const ProfileFromId = ({match}) => {
+            return (
+                <ViewProfile userid={parseInt(match.params.id, 10)} />
+            );
+        };
+
         return (
             <React.Fragment>
                 <SignupModal isModalOpen={this.state.isSignupOpen} 
@@ -147,6 +154,7 @@ class Main extends Component {
                     <Route path="/library" component={Library} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
                     <Route path="/book/:id" component={BookFromId} />
+                    <Route path="/profile/:id" component={ProfileFromId} />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

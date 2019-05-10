@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Progress, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import TableContainer from './TableContainerComponent';
-import SortableColumn from './SortableColumnComponent';
+import BooksTable from './BooksTableComponent';
 import { calculatePageSlice } from '../../utils/pagination';
-import { getAuthors, getRating } from '../../utils/functions';
+import { getAuthors, getRating, orderBooks } from '../../utils/functions';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -34,42 +32,12 @@ class LibraryTable extends Component {
             page: 1
         }
 
-        this.headerData = [
-            {
-                id: 1,
-                orderby: 'title',
-                title: 'Title'
-            },
-            {
-                id: 2,
-                orderby: 'subtitle',
-                title: 'Short Description'
-            },
-            {
-                id: 3,
-                orderby: 'authors',
-                title: 'Author'
-            },
-            {
-                id: 4,
-                orderby: 'length',
-                title: 'Length'
-            },
-            {
-                id: 5,
-                orderby: 'rating',
-                title: 'Rating'
-            }
-        ];
-
         this.anchor = 'library';
 
         this.filterToggle = this.filterToggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.setSort = this.setSort.bind(this);
         this.setPage = this.setPage.bind(this);
-        this.renderHead = this.renderHead.bind(this);
-        this.renderBody = this.renderBody.bind(this);
     }
 
     fetchBooks() {
@@ -125,23 +93,7 @@ class LibraryTable extends Component {
             });
         }
 
-        if (this.state.orderby !== '') {
-            const orderby = this.state.orderby;
-
-            books = books.sort((a, b) => {
-                if (orderby === 'authors') {
-                    return (a.authors[0].name > b.authors[0].name) ? 1 : ((b.authors[0].name > a.authors[0].name) ? -1 : 0);
-                } else {
-                    return (a[orderby] > b[orderby]) ? 1 : ((b[orderby] > a[orderby]) ? -1 : 0);
-                }
-            });
-
-            if (!this.state.orderasc) {
-                books = books.reverse();
-            }
-        }
-
-        return books;
+        return orderBooks(books, this.state.orderby, this.state.orderasc);
     }
 
     filterToggle() {
@@ -183,56 +135,6 @@ class LibraryTable extends Component {
         });
     }
 
-    renderColumns() {
-        return (
-            <colgroup>
-                <col style={{width: '20%'}} />
-                <col style={{width: '40%'}} />
-                <col style={{width: '20%'}} />
-                <col style={{width: '10%'}} />
-                <col style={{width: '10%'}} />
-            </colgroup>
-        );
-    }
-
-    renderHead() {
-        return this.headerData.map(header => {
-            return (
-                <SortableColumn key={header.id} header={header} 
-                    orderby={this.state.orderby} 
-                    orderasc={this.state.orderasc} 
-                    anchor={'#' + this.anchor} 
-                    setSort={(orderby) => this.setSort(orderby)} />
-            );
-        });
-    }
-
-    renderBody(books) {
-        return (
-            <React.Fragment>
-                {books.map(book => {
-                        const authors = book.authors.map(author => {
-                            return (
-                                <li key={author.id}><Link to={`/profile/${author.id}`}>{author.name}</Link></li>
-                            );
-                        });
-
-                        return (
-                            <tr key={book.id}>
-                                <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
-                                <td>{book.subtitle}</td>
-                                <td>
-                                    <ul className="list-unstyled">{authors}</ul>
-                                </td>
-                                <td><Progress value={book.length} color="dark" /></td>
-                                <td>{book.rating}/5</td>
-                            </tr>
-                        );
-                    })}
-            </React.Fragment>
-        );
-    }
-
     componentDidMount() {
         this.fetchBooks();
     }
@@ -268,14 +170,16 @@ class LibraryTable extends Component {
                         </InputGroup>
                     </div>
                 </div>
-                <TableContainer columns={this.renderColumns} 
-                    thead={this.renderHead} 
-                    tbody={this.renderBody}
-                    items={books}
-                    anchor={'#' + this.anchor}
+                <BooksTable
+                    orderby={this.state.orderby}
+                    orderasc={this.state.orderasc}
+                    anchor={this.anchor}
+                    setSort={(orderby) => this.setSort(orderby)}
+                    books={books}
                     setPage={(page) => this.setPage(page)}
-                    currPage={this.state.page}
-                    totalItems={totalItems} />
+                    page={this.state.page}
+                    totalItems={totalItems}
+                    />
             </React.Fragment>
         );
     }

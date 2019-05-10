@@ -32,7 +32,8 @@ class ViewBook extends Component {
                     subtitle: '',
                     authors: [],
                     length: 0,
-                    description: ''}
+                    description: ''
+                }
             },
             reviews: {
                 reviews: [],
@@ -131,6 +132,7 @@ class ViewBook extends Component {
         }
 
         let i = 0;
+        let isAuthor = false;
         const numAuthors = this.state.book.book.authors.length;
         const authors = this.state.book.book.authors.map(author => {
             let separator = '';
@@ -144,6 +146,9 @@ class ViewBook extends Component {
                 i++;
             }
 
+            if (author.id === this.props.user.id)
+                isAuthor = true;
+
             const val = (
                 <React.Fragment key={author.id}>
                     <Link to={`/profile/${author.id}`}>{author.name}</Link>{separator}
@@ -152,6 +157,17 @@ class ViewBook extends Component {
 
             return val;
         });
+
+        let editBook = (<div></div>);
+        if (isAuthor) {
+            editBook = (
+                <div className="row">
+                    <div className="col">
+                        <Link to={`/book/${this.props.bookid}/edit`}>Edit Book</Link>
+                    </div>
+                </div>
+            );
+        }
 
         const dtClass = "col-2";
         const book = this.state.book.book;
@@ -181,6 +197,7 @@ class ViewBook extends Component {
                         {book.description}
                     </div>
                 </div>
+                {editBook}
                 <div className="row justify-content-center">
                     <div className="col-auto">
                         <Button color="success" href={`/page/${book.startpageid}`}>Read Book</Button>
