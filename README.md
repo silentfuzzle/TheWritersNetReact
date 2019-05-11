@@ -2,6 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
+* Allow users to edit reviews anywhere reviews are displayed
 * Allow users to use markdown in reviews
 * Allow users to use markdown in profile
 * Implement updating and creating reviews

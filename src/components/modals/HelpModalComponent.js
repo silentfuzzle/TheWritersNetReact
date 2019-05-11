@@ -7,7 +7,7 @@ function HelpModal({title, isModalOpen, toggleModal, children}) {
         <ClosableModal title={title} 
             isModalOpen={isModalOpen} 
             toggleModal={toggleModal}
-        >
+            >
             {children}
             <div className="row justify-content-end">
                 <div className="col-auto">

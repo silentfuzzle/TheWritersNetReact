@@ -1,7 +1,4 @@
-export const required = (val) => {
-    let test = val.trim();
-    return test && test.length;
-} 
+export const required = (val) => { return val && val.trim().length; } 
 
 export const maxLength = (len) => (val) => !(val) || (val.length <= len);
 

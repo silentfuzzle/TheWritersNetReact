@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
+import { Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { minLength, maxLength, validEmail, validPassword, required } from '../../utils/validators';
 import ClosableModal from '../modals/ClosableModalComponent';
 import UnclosableModal from '../modals/UnclosableModalComponent';
@@ -114,68 +114,66 @@ class SignupModal extends Component {
 
     renderForm() {
         return (
-            <ModalBody>
-                <Form onSubmit={this.handleSubmit}>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="username">Username</Label>
-                            <Input type="text"
-                                id="username" 
-                                name="username"
-                                value={this.state.username}
-                                disabled={this.state.signupLoading}
-                                invalid={this.state.errors.username !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.username}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="email">Email</Label>
-                            <Input type="text"
-                                id="email" 
-                                name="email"
-                                value={this.state.email}
-                                disabled={this.state.signupLoading}
-                                invalid={this.state.errors.email !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.email}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="password">Password</Label>
-                            <Input type="password" 
-                                id="password" 
-                                name="password"
-                                value={this.state.password}
-                                disabled={this.state.signupLoading}
-                                invalid={this.state.errors.password !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.password}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="confirmPassword">Confirm Password</Label>
-                            <Input type="password" 
-                                id="confirmPassword" 
-                                name="confirmPassword"
-                                value={this.state.confirmPassword}
-                                disabled={this.state.signupLoading}
-                                invalid={this.state.errors.confirmPassword !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.confirmPassword}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row className="justify-content-end">
-                        <Col xs="auto">
-                            <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.signupLoading}>Cancel</Button>
-                            <Button type="submit" color="success" disabled={this.state.signupLoading}>Login</Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </ModalBody>
+            <Form onSubmit={this.handleSubmit}>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="username">Username</Label>
+                        <Input type="text"
+                            id="username" 
+                            name="username"
+                            value={this.state.username}
+                            disabled={this.state.signupLoading}
+                            invalid={this.state.errors.username !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.username}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="email">Email</Label>
+                        <Input type="text"
+                            id="email" 
+                            name="email"
+                            value={this.state.email}
+                            disabled={this.state.signupLoading}
+                            invalid={this.state.errors.email !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.email}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="password">Password</Label>
+                        <Input type="password" 
+                            id="password" 
+                            name="password"
+                            value={this.state.password}
+                            disabled={this.state.signupLoading}
+                            invalid={this.state.errors.password !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.password}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="confirmPassword">Confirm Password</Label>
+                        <Input type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword"
+                            value={this.state.confirmPassword}
+                            disabled={this.state.signupLoading}
+                            invalid={this.state.errors.confirmPassword !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.confirmPassword}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row className="justify-content-end">
+                    <Col xs="auto">
+                        <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.signupLoading}>Cancel</Button>
+                        <Button type="submit" color="success" disabled={this.state.signupLoading}>Login</Button>
+                    </Col>
+                </FormGroup>
+            </Form>
         );
     }
 

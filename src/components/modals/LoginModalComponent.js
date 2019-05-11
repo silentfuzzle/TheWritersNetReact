@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ModalBody, Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
+import { Label, Col, Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { required } from '../../utils/validators';
 import ClosableModal from '../modals/ClosableModalComponent';
 import UnclosableModal from '../modals/UnclosableModalComponent';
@@ -97,42 +97,40 @@ class LoginModal extends Component {
 
     renderForm() {
         return (
-            <ModalBody>
-                <Form onSubmit={this.handleSubmit}>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="username">Username</Label>
-                            <Input type="text"
-                                id="username" 
-                                name="username"
-                                value={this.state.username}
-                                disabled={this.state.loginLoading}
-                                invalid={this.state.errors.username !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.username}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col>
-                            <Label htmlFor="password">Password</Label>
-                            <Input type="password" 
-                                id="password" 
-                                name="password"
-                                value={this.state.password}
-                                disabled={this.state.loginLoading}
-                                invalid={this.state.errors.password !== ''}
-                                onChange={this.handleChange} />
-                            <FormFeedback>{this.state.errors.password}</FormFeedback>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row className="justify-content-end">
-                        <Col xs="auto">
-                            <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.loginLoading}>Cancel</Button>
-                            <Button type="submit" color="success" disabled={this.state.loginLoading}>Login</Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </ModalBody>
+            <Form onSubmit={this.handleSubmit}>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="username">Username</Label>
+                        <Input type="text"
+                            id="username" 
+                            name="username"
+                            value={this.state.username}
+                            disabled={this.state.loginLoading}
+                            invalid={this.state.errors.username !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.username}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Col>
+                        <Label htmlFor="password">Password</Label>
+                        <Input type="password" 
+                            id="password" 
+                            name="password"
+                            value={this.state.password}
+                            disabled={this.state.loginLoading}
+                            invalid={this.state.errors.password !== ''}
+                            onChange={this.handleChange} />
+                        <FormFeedback>{this.state.errors.password}</FormFeedback>
+                    </Col>
+                </FormGroup>
+                <FormGroup row className="justify-content-end">
+                    <Col xs="auto">
+                        <Button className="mr-1" onClick={this.toggleModal} disabled={this.state.loginLoading}>Cancel</Button>
+                        <Button type="submit" color="success" disabled={this.state.loginLoading}>Login</Button>
+                    </Col>
+                </FormGroup>
+            </Form>
         );
     }
 

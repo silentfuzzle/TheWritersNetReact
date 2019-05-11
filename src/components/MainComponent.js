@@ -8,6 +8,7 @@ import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
+import EditBook from './pages/EditBookComponent';
 import ViewProfile from './pages/ViewProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
@@ -75,7 +76,6 @@ class Main extends Component {
     }
 
     toggleReviewModal(reviewid = 0) {
-        console.log(reviewid);
         this.setState({
             reviewModal: {
                 isReviewOpen: !this.state.reviewModal.isReviewOpen,
@@ -110,11 +110,20 @@ class Main extends Component {
     }
 
     render() {
-        const BookFromId = ({match}) => {
+        const ViewBookFromId = ({match}) => {
             return (
                 <ViewBook 
                     bookid={parseInt(match.params.id, 10)} 
                     toggleReviewModal={this.toggleReviewModal} 
+                    />
+            );
+        };
+
+        const EditBookFromId = ({match}) => {
+            return (
+                <EditBook 
+                    bookid={parseInt(match.params.id, 10)} 
+                    toggleMarkdownModal={this.toggleMarkdownModal}
                     />
             );
         };
@@ -127,25 +136,30 @@ class Main extends Component {
 
         return (
             <React.Fragment>
-                <SignupModal isModalOpen={this.state.isSignupOpen} 
+                <SignupModal 
+                    isModalOpen={this.state.isSignupOpen} 
                     toggleModal={this.toggleSignupModal} 
                     postSignup={this.props.postSignup}
                     users={this.props.users} />
-                <LoginModal isModalOpen={this.state.isLoginOpen}
+                <LoginModal 
+                    isModalOpen={this.state.isLoginOpen}
                     toggleModal={this.toggleLoginModal}
                     postLogin={this.props.postLogin}
                     users={this.props.users} />
-                <ReviewModal isModalOpen={this.state.reviewModal.isReviewOpen}
+                <ReviewModal 
+                    isModalOpen={this.state.reviewModal.isReviewOpen}
                     toggleModal={this.toggleReviewModal}
                     reviewLoading={this.state.reviewModal.loadingReview}
                     initialState={this.state.reviewModal.initialState} />
-                <HelpModal title={'Markdown Helper'}
+                <HelpModal 
+                    title={'Markdown Helper'}
                     isModalOpen={this.state.isMarkdownOpen}
                     toggleModal={this.toggleMarkdownModal}>
                     <ModalBody>
                         <p>Insert markdown instructions here.</p>
                     </ModalBody>
                 </HelpModal>
+
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
                     toggleLoginModal={this.toggleLoginModal} />
@@ -153,7 +167,8 @@ class Main extends Component {
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
-                    <Route path="/book/:id" component={BookFromId} />
+                    <Route path="/book/:id/edit" component={EditBookFromId} />
+                    <Route path="/book/:id" component={ViewBookFromId} />
                     <Route path="/profile/:id" component={ProfileFromId} />
                     <Redirect to="/" />
                 </Switch>

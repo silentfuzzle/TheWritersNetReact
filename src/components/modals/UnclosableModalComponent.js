@@ -1,11 +1,13 @@
 import React from 'react';
-import { Modal, ModalHeader } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 function UnclosableModal(props) {
     return (
         <Modal isOpen={props.isModalOpen}>
             <ModalHeader>{props.title}</ModalHeader>
-            {props.children}
+            <ModalBody>
+                {props.children}
+            </ModalBody>
         </Modal>
     );
 }
