@@ -68,103 +68,99 @@ class EditBookForm extends Component {
         }
 
         return (
-            <div className="row">
-                <div className="col-12">
-                    <LocalForm onSubmit={this.handleSubmit} initialState={this.state.book}>
-                        <Row className="form-group">
-                            <Col>
-                                <Label for="title">Title</Label>
-                                <Control.text 
-                                    model=".title" 
-                                    className="form-control form-control-sm mr-1" 
-                                    id="title"
-                                    name="title"
-                                    validators={{ required }}
-                                    />
-                                <Errors 
-                                    className="text-danger" 
-                                    model=".title" 
-                                    show="touched" 
-                                    messages={{ required: 'Required' }}
-                                    />
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Col>
-                                <Label for="subtitle">Short Description</Label>
-                                <Control.text 
-                                    model=".subtitle"
-                                    className="form-control form-control-sm mr-1"
-                                    id="subtitle"
-                                    name="subtitle"
-                                    validators={{ required }}
-                                    />
-                                <Errors 
-                                    className="text-danger" 
-                                    model=".subtitle" 
-                                    show="touched" 
-                                    messages={{ required: 'Required' }}
-                                    />
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Col>
-                                <Label for="description" id={this.anchor}>Description</Label>
-                                <Control.textarea
-                                    model=".description"
-                                    className="form-control form-control-sm mr-1"
-                                    id="description"
-                                    name="description"
-                                    rows="5"
-                                    validators={{ required }}
-                                    />
-                                <Errors 
-                                    className="text-danger" 
-                                    model=".description" 
-                                    show="touched" 
-                                    messages={{ required: 'Required' }}
-                                    />
-                                <a href={'#' + this.anchor} onClick={this.props.toggleMarkdownModal}>Markdown Help</a>
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Col>
-                                <Label for="visibility">Visibility</Label>
-                                <div className="form-check">
-                                    <Control.radio
-                                        model=".visibility"
-                                        className="form-check-input"
-                                        name="visibility"
-                                        id="visibility"
-                                        value="public"
-                                        defaultValue="public"
-                                        />
-                                    <Label className="form-check-label" for="public">
-                                        Public (Anyone can view this book)
-                                    </Label>
-                                </div>
-                                <div className="form-check">
-                                    <Control.radio
-                                        model=".visibility"
-                                        className="form-check-input"
-                                        name="visibility"
-                                        id="visibility"
-                                        value="private"
-                                        />
-                                    <Label className="form-check-label" for="private">
-                                        Private (You choose who can view this book)
-                                    </Label>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row className="form-group row justify-content-end">
-                            <Col xs="auto">
-                                <Button color="success">Save</Button>
-                            </Col>
-                        </Row>
-                    </LocalForm>
-                </div>
-            </div>
+            <LocalForm onSubmit={this.handleSubmit} initialState={this.state.book}>
+                <Row className="form-group">
+                    <Col>
+                        <Label for="title">Title</Label>
+                        <Control.text 
+                            model=".title" 
+                            className="form-control form-control-sm mr-1" 
+                            id="title"
+                            name="title"
+                            validators={{ required }}
+                            />
+                        <Errors 
+                            className="text-danger" 
+                            model=".title" 
+                            show="touched" 
+                            messages={{ required: 'Required' }}
+                            />
+                    </Col>
+                </Row>
+                <Row className="form-group">
+                    <Col>
+                        <Label for="subtitle">Short Description</Label>
+                        <Control.text 
+                            model=".subtitle"
+                            className="form-control form-control-sm mr-1"
+                            id="subtitle"
+                            name="subtitle"
+                            validators={{ required }}
+                            />
+                        <Errors 
+                            className="text-danger" 
+                            model=".subtitle" 
+                            show="touched" 
+                            messages={{ required: 'Required' }}
+                            />
+                    </Col>
+                </Row>
+                <Row className="form-group">
+                    <Col>
+                        <Label for="description" id={this.anchor}>Description</Label>
+                        <Control.textarea
+                            model=".description"
+                            className="form-control form-control-sm mr-1"
+                            id="description"
+                            name="description"
+                            rows="5"
+                            validators={{ required }}
+                            />
+                        <Errors 
+                            className="text-danger" 
+                            model=".description" 
+                            show="touched" 
+                            messages={{ required: 'Required' }}
+                            />
+                        <a href={'#' + this.anchor} onClick={this.props.toggleMarkdownModal}>Markdown Help</a>
+                    </Col>
+                </Row>
+                <Row className="form-group">
+                    <Col>
+                        <Label for="visibility">Visibility</Label>
+                        <div className="form-check">
+                            <Control.radio
+                                model=".visibility"
+                                className="form-check-input"
+                                name="visibility"
+                                id="visibility"
+                                value="public"
+                                defaultValue="public"
+                                />
+                            <Label className="form-check-label" for="public">
+                                Public (Anyone can view this book)
+                            </Label>
+                        </div>
+                        <div className="form-check">
+                            <Control.radio
+                                model=".visibility"
+                                className="form-check-input"
+                                name="visibility"
+                                id="visibility"
+                                value="private"
+                                />
+                            <Label className="form-check-label" for="private">
+                                Private (You choose who can view this book)
+                            </Label>
+                        </div>
+                    </Col>
+                </Row>
+                <Row className="form-group row justify-content-end">
+                    <Col xs="auto">
+                        <Button color="success">Save</Button>
+                    </Col>
+                </Row>
+            </LocalForm>
         );
     }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import EditBookForm from '../forms/EditBookFormComponent';
+import PermissionsTable from '../tables/PermissionsTableComponent';
 
 class EditBook extends Component {
     render() {
@@ -18,10 +19,19 @@ class EditBook extends Component {
                         <h1>Edit Book</h1>
                     </div>
                 </div>
-                <EditBookForm 
-                    toggleMarkdownModal={this.props.toggleMarkdownModal}
-                    bookid={this.props.bookid}
-                    />
+                <div className="row">
+                    <div className="col">
+                        <EditBookForm 
+                            toggleMarkdownModal={this.props.toggleMarkdownModal}
+                            bookid={this.props.bookid}
+                            />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <PermissionsTable bookid={this.props.bookid} />
+                    </div>
+                </div>
             </div>
         );
     }

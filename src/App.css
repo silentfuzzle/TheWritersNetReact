@@ -34,8 +34,3 @@ body {
   height: 100vh;
   z-index: 999;
 }
-
-.table-hack {
-  height: 200px; 
-  overflow: auto;
-}
