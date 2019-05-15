@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'reactstrap';
 
 function SortableColumn(props) {
     let arrow = <span></span>;
@@ -12,9 +13,9 @@ function SortableColumn(props) {
 
     return (
         <th>
-            <a href={props.anchor} onClick={() => props.setSort(props.header.orderby)}>
+            <Button color="link" onClick={() => props.setSort(props.header.orderby)}>
                 {props.header.title} {arrow}
-            </a>
+            </Button>
         </th>
     );
 }

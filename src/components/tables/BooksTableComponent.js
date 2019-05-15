@@ -56,8 +56,7 @@ class BooksTable extends Component {
             return (
                 <SortableColumn key={header.id} header={header} 
                     orderby={this.props.orderby} 
-                    orderasc={this.props.orderasc} 
-                    anchor={'#' + this.props.anchor} 
+                    orderasc={this.props.orderasc}
                     setSort={(orderby) => this.props.setSort(orderby)} />
             );
         });
@@ -96,7 +95,6 @@ class BooksTable extends Component {
                 thead={this.renderHead} 
                 tbody={this.renderBody}
                 items={this.props.books}
-                anchor={'#' + this.props.anchor}
                 setPage={(page) => this.props.setPage(page)}
                 currPage={this.props.page}
                 totalItems={this.props.totalItems} 

@@ -84,9 +84,6 @@ class ViewProfile extends Component {
             }
         }
 
-        this.booksAnchor = 'books';
-        this.reviewsAnchor = 'reviews';
-
         this.setSort = this.setSort.bind(this);
         this.setBooksPage = this.setBooksPage.bind(this);
         this.setReviewsPage = this.setReviewsPage.bind(this);
@@ -251,13 +248,12 @@ class ViewProfile extends Component {
                 <SocialMediaBar user={user} />
                 <div className="row">
                     <div className="col">
-                        <h2 id={this.booksAnchor}>Books</h2>
+                        <h2>Books</h2>
                     </div>
                 </div>
                 <BooksTable
                     orderby={this.state.books.orderby}
                     orderasc={this.state.books.orderasc}
-                    anchor={this.booksAnchor}
                     setSort={(orderby) => this.setSort(orderby)}
                     books={books}
                     setPage={(page) => this.setBooksPage(page)}
@@ -266,12 +262,11 @@ class ViewProfile extends Component {
                     />
                 <div className="row">
                     <div className="col">
-                        <h2 id={this.reviewsAnchor}>Reviews</h2>
+                        <h2>Reviews</h2>
                     </div>
                 </div>
                 <ReviewsList 
                     reviews={reviews}
-                    anchor={'#' + this.reviewsAnchor}
                     setPage={(page) => this.setReviewsPage(page)}
                     currPage={this.state.reviews.page}
                     totalItems={numReviews}

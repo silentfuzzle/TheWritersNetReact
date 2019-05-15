@@ -20,8 +20,6 @@ class EditBookForm extends Component {
             errMess: '',
             book: {}
         }
-
-        this.anchor = "description";
     }
 
     fetchBook() {
@@ -107,7 +105,7 @@ class EditBookForm extends Component {
                 </Row>
                 <Row className="form-group">
                     <Col>
-                        <Label for="description" id={this.anchor}>Description</Label>
+                        <Label for="description">Description</Label>
                         <Control.textarea
                             model=".description"
                             className="form-control form-control-sm mr-1"
@@ -122,7 +120,7 @@ class EditBookForm extends Component {
                             show="touched" 
                             messages={{ required: 'Required' }}
                             />
-                        <a href={'#' + this.anchor} onClick={this.props.toggleMarkdownModal}>Markdown Help</a>
+                        <Button color="link" onClick={this.props.toggleMarkdownModal}>Markdown Help</Button>
                     </Col>
                 </Row>
                 <Row className="form-group">

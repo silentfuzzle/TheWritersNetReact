@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Progress } from 'reactstrap';
+import { Progress, Button } from 'reactstrap';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
@@ -53,8 +53,6 @@ class OpenedBooksTable extends Component {
                 title: 'My Rating'
             }
         ];
-
-        this.anchor = 'opened-books';
 
         this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
         this.removeHandler = this.removeHandler.bind(this);
@@ -177,8 +175,7 @@ class OpenedBooksTable extends Component {
             return (
                 <SortableColumn key={header.id} header={header} 
                     orderby={this.state.orderby} 
-                    orderasc={this.state.orderasc} 
-                    anchor={'#' + this.anchor} 
+                    orderasc={this.state.orderasc}
                     setSort={(orderby) => this.setSort(orderby)} />
             );
         });
@@ -199,10 +196,10 @@ class OpenedBooksTable extends Component {
                         <tr key={book.id}>
                             <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
                             <td><Progress value={book.progress} color="dark" /></td>
-                            <td><a href={'#' + this.anchor} onClick={() => this.props.toggleReviewModal(book.reviewid)}>{book.rating}</a></td>
+                            <td><Button color="link" onClick={() => this.props.toggleReviewModal(book.reviewid)}>{book.rating}</Button></td>
                             <td>
                                 <Link to={`page/${book.currpage}`}><span className="fa fa-eye" title="Open"></span> </Link>
-                                <a href={'#' + this.anchor} onClick={() => this.toggleRemoveModal(book.id)}><span className="fa fa-remove" title="Remove"></span></a>
+                                <Button color="link" onClick={() => this.toggleRemoveModal(book.id)}><span className="fa fa-remove" title="Remove"></span></Button>
                             </td>
                         </tr>
                     );
@@ -242,7 +239,6 @@ class OpenedBooksTable extends Component {
                     thead={this.renderHead} 
                     tbody={this.renderBody}
                     items={books}
-                    anchor={'#' + this.anchor}
                     setPage={(page) => this.setPage(page)}
                     currPage={this.state.page}
                     totalItems={totalItems} />

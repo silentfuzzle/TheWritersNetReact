@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Button } from 'reactstrap';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import PermissionForm from '../forms/PermissionFormComponent';
+import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 
 const mapStateToProps = state => {
@@ -26,7 +27,9 @@ class PermissionsTable extends Component {
             permissions: [],
             orderby: '',
             orderasc: true,
-            page: 1
+            page: 1,
+            modalOpen: false,
+            selectedPermission: 0
         }
 
         this.headerData = [
@@ -42,12 +45,12 @@ class PermissionsTable extends Component {
             }
         ];
 
-        this.anchor = 'permissions';
-
         this.setSort = this.setSort.bind(this);
         this.setPage = this.setPage.bind(this);
         this.renderHead = this.renderHead.bind(this);
         this.renderBody = this.renderBody.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
     }
 
     fetchPermissions() {
@@ -122,6 +125,13 @@ class PermissionsTable extends Component {
         });
     }
 
+    toggleModal(id = 0) {
+        this.setState({
+            modalOpen: !this.state.modalOpen,
+            selectedPermission: id
+        });
+    }
+
     handleChange(event, id) {
         const target = event.target;
         const value = target.value;
@@ -129,8 +139,9 @@ class PermissionsTable extends Component {
         console.log('change permission ' + id + ' to ' + value);
     }
 
-    handleRemove(id) {
-        console.log('remove ' + id);
+    handleRemove() {
+        console.log('remove permission ' + this.state.selectedPermission);
+        this.toggleModal(0);
     }
 
     addPermission(userid, permissionid) {
@@ -148,8 +159,7 @@ class PermissionsTable extends Component {
             return (
                 <SortableColumn key={header.id} header={header} 
                     orderby={this.state.orderby} 
-                    orderasc={this.state.orderasc} 
-                    anchor={'#' + this.anchor} 
+                    orderasc={this.state.orderasc}
                     setSort={(orderby) => this.setSort(orderby)} />
             );
         });
@@ -183,9 +193,9 @@ class PermissionsTable extends Component {
                                 </select>
                             </td>
                             <td>
-                                <a href={'#' + this.anchor} onClick={() => this.handleRemove(p.id)}>
+                                <Button color="link" onClick={() => this.toggleModal(p.id)}>
                                     <span className="fa fa-remove" title="Remove"></span>
-                                </a>
+                                </Button>
                             </td>
                         </tr>
                     );
@@ -201,7 +211,7 @@ class PermissionsTable extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <h4>Loading Books...</h4>
+                <h4>Loading Permissions...</h4>
             );
         } else if (this.state.errMess) {
             return (
@@ -214,28 +224,36 @@ class PermissionsTable extends Component {
         permissions = permissions.slice(...calculatePageSlice(this.state.page));
 
         return (
-            <Card id={this.anchor}>
-                <CardHeader>Permissions</CardHeader>
-                <CardBody>
-                    <TableContainer
-                        columns={this.renderColumns} 
-                        thead={this.renderHead} 
-                        tbody={this.renderBody}
-                        items={permissions}
-                        anchor={'#' + this.anchor}
-                        setPage={(page) => this.setPage(page)}
-                        currPage={this.state.page}
-                        totalItems={totalItems}
-                        />
-                </CardBody>
-                <CardFooter>
-                    <PermissionForm 
-                        users={this.props.users} 
-                        permissionTypes={this.props.permissionTypes}
-                        addPermission={this.addPermission}
-                        />
-                </CardFooter>
-            </Card>
+            <React.Fragment>
+                <ConfirmActionModal isModalOpen={this.state.modalOpen} 
+                    toggleModal={this.toggleModal} 
+                    submitHandler={this.handleRemove}
+                    buttonText={'Remove'}>
+                    <p>Are you sure you want to remove this user's permissions?</p>
+                </ConfirmActionModal>
+                <h3 id="permissions">Test</h3>
+                <Card>
+                    <CardHeader>Permissions</CardHeader>
+                    <CardBody>
+                        <TableContainer
+                            columns={this.renderColumns} 
+                            thead={this.renderHead} 
+                            tbody={this.renderBody}
+                            items={permissions}
+                            setPage={(page) => this.setPage(page)}
+                            currPage={this.state.page}
+                            totalItems={totalItems}
+                            />
+                    </CardBody>
+                    <CardFooter>
+                        <PermissionForm 
+                            users={this.props.users} 
+                            permissionTypes={this.props.permissionTypes}
+                            addPermission={this.addPermission}
+                            />
+                    </CardFooter>
+                </Card>
+            </React.Fragment>
         );
     }
 }

@@ -40,8 +40,6 @@ class ViewBook extends Component {
                 page: 1
             }
         };
-
-        this.anchor = 'reviews';
     }
 
     fetchBook() {
@@ -190,7 +188,7 @@ class ViewBook extends Component {
                     <dd className="col-3"><Progress value={book.length} color="dark" /></dd>
                     <div className="w-100"></div>
                     <dt className={dtClass}>Rating:</dt>
-                    <dd className="col-10">{book.rating}/5 (<a href="#reviews">{numReviews} Reviews</a>, {this.state.reviews.reviews.length} Ratings)</dd>
+                    <dd className="col-10">{book.rating}/5 (<Button color="link">{numReviews} Reviews</Button>, {this.state.reviews.reviews.length} Ratings)</dd>
                 </dl>
                 <div className="row">
                     <div className="col">
@@ -205,7 +203,7 @@ class ViewBook extends Component {
                 </div>
                 <div className="row justify-content-between">
                     <div className="col-auto">
-                        <h2 id={this.anchor}>{numReviews} Reviews</h2>
+                        <h2>{numReviews} Reviews</h2>
                     </div>
                     <div className="col-auto">
                         <Button color="success" onClick={() => this.props.toggleReviewModal(book.reviewid)}>Write Review</Button>
@@ -213,7 +211,6 @@ class ViewBook extends Component {
                 </div>
                 <ReviewsList 
                     reviews={reviews}
-                    anchor={'#' + this.anchor}
                     setPage={(page) => this.setPage(page)}
                     currPage={this.state.reviews.page}
                     totalItems={numReviews}

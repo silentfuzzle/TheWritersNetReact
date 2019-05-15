@@ -29,7 +29,6 @@ function TableContainer(props) {
                 </div>
             </div>
             <PaginationControls
-                anchor={props.anchor}
                 setPage={props.setPage}
                 currPage={props.currPage}
                 numItems={props.totalItems} />

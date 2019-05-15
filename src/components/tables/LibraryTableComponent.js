@@ -32,8 +32,6 @@ class LibraryTable extends Component {
             page: 1
         }
 
-        this.anchor = 'library';
-
         this.filterToggle = this.filterToggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.setSort = this.setSort.bind(this);
@@ -156,7 +154,7 @@ class LibraryTable extends Component {
 
         return (
             <React.Fragment>
-                <div id={this.anchor} className="row justify-content-end">
+                <div className="row justify-content-end">
                     <div className="col-sm-12 col-md-8 col-lg-6">
                         <InputGroup className="mb-3">
                             <Input type="text" placeholder="Keywords" 
@@ -173,7 +171,6 @@ class LibraryTable extends Component {
                 <BooksTable
                     orderby={this.state.orderby}
                     orderasc={this.state.orderasc}
-                    anchor={this.anchor}
                     setSort={(orderby) => this.setSort(orderby)}
                     books={books}
                     setPage={(page) => this.setPage(page)}

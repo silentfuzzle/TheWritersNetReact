@@ -2,6 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
+* Test that Pagination buttons still work
+* Style table headers and option buttons
 * Implement remove permission in PermissionsTable
 * Test PermissionsTable
 * Allow users to edit reviews anywhere reviews are displayed

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ModalBody } from 'reactstrap';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './pages/HomeComponent';
@@ -12,7 +11,7 @@ import EditBook from './pages/EditBookComponent';
 import ViewProfile from './pages/ViewProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
-import HelpModal from './modals/HelpModalComponent';
+import MarkdownModal from './modals/MarkdownModalComponent';
 import ReviewModal from './modals/ReviewModalComponent';
 import { addLogin, postSignup } from '../redux/loginReducer';
 
@@ -30,6 +29,30 @@ const mapDispatchToProps = (dispatch) => ({
     postLogin: (user) => dispatch(addLogin(user)),
     postSignup: (user) => dispatch(postSignup(user))
 });
+
+const ViewBookFromId = ({match, toggleReviewModal}) => {
+    return (
+        <ViewBook 
+            bookid={parseInt(match.params.id, 10)} 
+            toggleReviewModal={toggleReviewModal} 
+            />
+    );
+};
+
+const EditBookFromId = ({match, toggleMarkdownModal}) => {
+    return (
+        <EditBook 
+            bookid={parseInt(match.params.id, 10)} 
+            toggleMarkdownModal={toggleMarkdownModal}
+            />
+    );
+};
+
+const ViewProfileFromId = ({match}) => {
+    return (
+        <ViewProfile userid={parseInt(match.params.id, 10)} />
+    );
+};
 
 class Main extends Component {
     constructor(props) {
@@ -110,29 +133,6 @@ class Main extends Component {
     }
 
     render() {
-        const ViewBookFromId = ({match}) => {
-            return (
-                <ViewBook 
-                    bookid={parseInt(match.params.id, 10)} 
-                    toggleReviewModal={this.toggleReviewModal} 
-                    />
-            );
-        };
-
-        const EditBookFromId = ({match}) => {
-            return (
-                <EditBook 
-                    bookid={parseInt(match.params.id, 10)} 
-                    toggleMarkdownModal={this.toggleMarkdownModal}
-                    />
-            );
-        };
-
-        const ProfileFromId = ({match}) => {
-            return (
-                <ViewProfile userid={parseInt(match.params.id, 10)} />
-            );
-        };
 
         return (
             <React.Fragment>
@@ -151,14 +151,10 @@ class Main extends Component {
                     toggleModal={this.toggleReviewModal}
                     reviewLoading={this.state.reviewModal.loadingReview}
                     initialState={this.state.reviewModal.initialState} />
-                <HelpModal 
-                    title={'Markdown Helper'}
+                <MarkdownModal 
                     isModalOpen={this.state.isMarkdownOpen}
-                    toggleModal={this.toggleMarkdownModal}>
-                    <ModalBody>
-                        <p>Insert markdown instructions here.</p>
-                    </ModalBody>
-                </HelpModal>
+                    toggleModal={this.toggleMarkdownModal}
+                    />
 
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
@@ -167,9 +163,9 @@ class Main extends Component {
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
-                    <Route path="/book/:id/edit" component={EditBookFromId} />
-                    <Route path="/book/:id" component={ViewBookFromId} />
-                    <Route path="/profile/:id" component={ProfileFromId} />
+                    <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
+                    <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />
+                    <Route path="/profile/:id" render={(props) => <ViewProfileFromId {...props} />} />
                     <Redirect to="/" />
                 </Switch>
                 <Footer />

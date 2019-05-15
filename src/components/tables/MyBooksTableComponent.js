@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Button } from 'reactstrap';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
@@ -45,8 +46,6 @@ class MyBooksTable extends Component {
                 title: 'Authorship'
             }
         ];
-
-        this.anchor = 'my-books';
 
         this.toggleDeleteModal = this.toggleDeleteModal.bind(this);
         this.deleteHandler = this.deleteHandler.bind(this);
@@ -165,8 +164,7 @@ class MyBooksTable extends Component {
             return (
                 <SortableColumn key={header.id} header={header} 
                     orderby={this.state.orderby} 
-                    orderasc={this.state.orderasc} 
-                    anchor={'#' + this.anchor} 
+                    orderasc={this.state.orderasc}
                     setSort={(orderby) => this.setSort(orderby)} />
             );
         });
@@ -190,7 +188,7 @@ class MyBooksTable extends Component {
                             <td>
                                 <Link to={`book/${book.id}/edit`}><span className="fa fa-pencil" title="Edit"></span> </Link>
                                 <Link to={`page/${book.startpageid}`}><span className="fa fa-eye" title="View"></span> </Link>
-                                <a href={'#' + this.anchor} onClick={() => this.toggleDeleteModal(book.id)}><span className="fa fa-remove" title="Delete"></span></a>
+                                <Button color="link" onClick={() => this.toggleDeleteModal(book.id)}><span className="fa fa-remove" title="Delete"></span></Button>
                             </td>
                         </tr>
                     );
@@ -230,7 +228,6 @@ class MyBooksTable extends Component {
                     thead={this.renderHead} 
                     tbody={this.renderBody}
                     items={books}
-                    anchor={'#' + this.anchor}
                     setPage={(page) => this.setPage(page)}
                     currPage={this.state.page}
                     totalItems={totalItems} />

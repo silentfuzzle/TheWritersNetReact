@@ -49,7 +49,6 @@ function ReviewsList(props) {
         <React.Fragment>
             {reviews}
             <PaginationControls
-                anchor={props.anchor}
                 setPage={props.setPage}
                 currPage={props.currPage}
                 numItems={props.totalItems} />
