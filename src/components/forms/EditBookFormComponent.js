@@ -7,7 +7,8 @@ import { required } from '../../utils/validators';
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
     return {
-        books: state.books
+        books: state.books,
+        pages: state.pages
     };
 };
 
@@ -18,7 +19,8 @@ class EditBookForm extends Component {
         this.state = {
             isLoading: false,
             errMess: '',
-            book: {}
+            book: {},
+            pages: []
         }
     }
 
@@ -29,18 +31,22 @@ class EditBookForm extends Component {
             book: {
                 title: '',
                 subtitle: '',
+                startpageid: '',
                 description: '',
                 visibility: 'public'
-            }
+            },
+            pages: []
         });
 
         setTimeout(() => {
-            let book = this.props.books.find(book => book.id === this.props.bookid);
+            const book = this.props.books.find(book => book.id === this.props.bookid);
+            const pages = this.props.pages.filter(p => p.bookid === this.props.bookid);
 
             this.setState({
                 isLoading: false,
                 errMess: '',
-                book: book
+                book: book,
+                pages: pages
             });
         }, 2000);
     }
@@ -101,6 +107,19 @@ class EditBookForm extends Component {
                             show="touched" 
                             messages={{ required: 'Required' }}
                             />
+                    </Col>
+                </Row>
+                <Row className="form-group">
+                    <Col xs={6}>
+                        <Label htmlFor="startpageid">Start Page</Label>
+                        <Control.select model=".startpageid" name="startpageid" 
+                                className="form-control" defaultValue={this.state.book.startpageid}>
+                            {
+                                this.state.pages.map(p => {
+                                    return (<option key={p.id} value={p.id}>{p.title}</option>);
+                                })
+                            }
+                        </Control.select>
                     </Col>
                 </Row>
                 <Row className="form-group">

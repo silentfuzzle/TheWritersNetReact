@@ -6,31 +6,25 @@ import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import EditIcon from '../pieces/EditIconComponent';
-import ViewIcon from '../pieces/ViewIconComponent';
 import DeleteIcon from '../pieces/DeleteIconComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
     return {
-        books: state.books,
-        permissions: state.permissions,
-        permissionTypes: state.permissionTypes,
-        user: state.login.user
+        pages: state.pages
     }
 }
 
-class MyBooksTable extends Component {
+class PagesTable extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             deleteModalOpen: false,
-            selectedBook: 0,
-            books: {
-                isLoading: false,
-                errMess: '',
-                books: []
-            },
+            selectedPage: 0,
+            isLoading: false,
+            errMess: '',
+            pages: [],
             orderby: '',
             orderasc: true,
             page: 1
@@ -39,13 +33,13 @@ class MyBooksTable extends Component {
         this.headerData = [
             {
                 id: 1,
-                orderby: 'title',
-                title: 'Title'
+                orderby: 'id',
+                title: 'ID',
             },
             {
                 id: 2,
-                orderby: 'authorship',
-                title: 'Authorship'
+                orderby: 'title',
+                title: 'Title'
             }
         ];
 
@@ -57,83 +51,54 @@ class MyBooksTable extends Component {
         this.renderBody = this.renderBody.bind(this);
     }
 
-    toggleDeleteModal(bookid = 0) {
-        this.setState({
-            deleteModalOpen: !this.state.deleteModalOpen,
-            selectedBook: bookid
-        });
-    }
-
-    deleteHandler() {
-        console.log(this.state.selectedBook);
-        this.toggleDeleteModal();
-    }
-
-    fetchBooks() {
+    fetchPages() {
         // This method would fetch the books from a database in the required form
         // It may also handle filtering, sorting, and pagination if the database is very large
         this.setState({
-            books: {
-                isLoading: true,
-                errMess: '',
-                books: []
-            }
+            isLoading: true,
+            errMess: '',
+            pages: []
         });
         
         setTimeout(() => {
-            let books = this.props.books.filter(book => {
-                const permission = this.props.permissions.find(permission => {
-                    return permission.userid === this.props.user.id &&
-                    permission.bookid === book.id &&
-                    permission.permissionid < 3;
-                });
-    
-                return permission;
-            })
-            .map(book => {
-                const permission = this.props.permissions.find(permission => {
-                    return permission.userid === this.props.user.id &&
-                    permission.bookid === book.id;
-                });
-    
-                const type = this.props.permissionTypes.find(type => {
-                    return type.id === permission.permissionid
-                });
-    
-                return {
-                    id: book.id,
-                    startpageid: book.startpageid,
-                    title: book.title,
-                    authorship: type.name
-                }
-            });
+            const pages = this.props.pages.filter(p => p.bookid === this.props.bookid);
     
             this.setState({
-                books: {
-                    isLoading: false,
-                    errMess: '',
-                    books: books
-                }
+                isLoading: false,
+                errMess: '',
+                pages: pages
             });
         }, 2000);
     }
 
-    getBooks() {
-        let books = this.state.books.books;
+    getPages() {
+        let pages = this.state.pages;
 
         if (this.state.orderby !== '') {
             const orderby = this.state.orderby;
 
-            books = books.sort((a, b) => {
+            pages = pages.sort((a, b) => {
                 return (a[orderby] > b[orderby]) ? 1 : ((b[orderby] > a[orderby]) ? -1 : 0)
             });
 
             if (!this.state.orderasc) {
-                books = books.reverse();
+                pages = pages.reverse();
             }
         }
 
-        return books;
+        return pages;
+    }
+
+    toggleDeleteModal(pageid = 0) {
+        this.setState({
+            deleteModalOpen: !this.state.deleteModalOpen,
+            selectedPage: pageid
+        });
+    }
+
+    deleteHandler() {
+        console.log(this.state.selectedPage);
+        this.toggleDeleteModal();
     }
 
     setSort(orderby) {
@@ -179,18 +144,17 @@ class MyBooksTable extends Component {
         );
     }
 
-    renderBody(books) {
+    renderBody(pages) {
         return (
             <React.Fragment>
-                {books.map(book => {
+                {pages.map(p => {
                     return (
-                        <tr key={book.id}>
-                            <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
-                            <td>{book.authorship}</td>
+                        <tr key={p.id}>
+                            <th scope="row">{p.id}</th>
+                            <td><Link to={`/page/${p.id}`}>{p.title}</Link></td>
                             <td>
-                                <EditIcon link={`book/${book.id}/edit`} />
-                                <ViewIcon link={`page/${book.startpageid}`} title='Open' />
-                                <DeleteIcon onClick={() => this.toggleDeleteModal(book.id)} title='Delete' />
+                                <EditIcon link={`page/${p.id}/edit`} />
+                                <DeleteIcon onClick={() => this.toggleDeleteModal(p.id)} title="Delete" />
                             </td>
                         </tr>
                     );
@@ -200,42 +164,44 @@ class MyBooksTable extends Component {
     }
 
     componentDidMount() {
-        this.fetchBooks();
+        this.fetchPages();
     }
 
     render() {
-        if (this.state.books.isLoading) {
+        if (this.state.isLoading) {
             return (
-                <h4>Loading Books...</h4>
+                <h4>Loading Pages...</h4>
             );
-        } else if (this.state.books.errMess) {
+        } else if (this.state.errMess) {
             return (
-                <h4>{this.state.books.errMess}</h4>
+                <h4>{this.state.errMess}</h4>
             );
         }
 
-        let books = this.getBooks();
-        const totalItems = books.length;
-        books = books.slice(...calculatePageSlice(this.state.page));
+        let pages = this.getPages();
+        const totalItems = pages.length;
+        pages = pages.slice(...calculatePageSlice(this.state.page));
 
         return (
             <React.Fragment>
                 <ConfirmActionModal isModalOpen={this.state.deleteModalOpen} 
                     toggleModal={this.toggleDeleteModal} 
                     submitHandler={this.deleteHandler}
-                    buttonText={'Delete'}>
-                    <p>Are you sure you want to delete this book and all its contents?</p>
+                    buttonText={'Delete'}
+                    >
+                    <p>Are you sure you want to delete this page?</p>
                 </ConfirmActionModal>
                 <TableContainer columns={this.renderColumns} 
                     thead={this.renderHead} 
                     tbody={this.renderBody}
-                    items={books}
+                    items={pages}
                     setPage={(page) => this.setPage(page)}
                     currPage={this.state.page}
-                    totalItems={totalItems} />
+                    totalItems={totalItems}
+                    />
             </React.Fragment>
         );
     }
 }
 
-export default connect(mapStateToProps)(MyBooksTable);
+export default connect(mapStateToProps)(PagesTable);

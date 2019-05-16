@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardHeader, CardFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 import TableContainer from './TableContainerComponent';
 import SortableColumn from './SortableColumnComponent';
 import PermissionForm from '../forms/PermissionFormComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
+import DeleteIcon from '../pieces/DeleteIconComponent';
 
 const mapStateToProps = state => {
     // With an actual database, users and reviews would not be necessary here
@@ -192,11 +193,7 @@ class PermissionsTable extends Component {
                                     }
                                 </select>
                             </td>
-                            <td>
-                                <Button color="link" onClick={() => this.toggleModal(p.id)}>
-                                    <span className="fa fa-remove" title="Remove"></span>
-                                </Button>
-                            </td>
+                            <td><DeleteIcon onClick={() => this.toggleModal(p.id)} /></td>
                         </tr>
                     );
                 })}

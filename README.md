@@ -2,16 +2,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
-* Test that Pagination buttons still work
+* Handle Create New Book, Create New Page, and Create New Section
 * Style table headers and option buttons
-* Implement remove permission in PermissionsTable
 * Test PermissionsTable
 * Allow users to edit reviews anywhere reviews are displayed
 * Allow users to use markdown in reviews
 * Allow users to use markdown in profile
 * Implement updating and creating reviews
 * Implement deleting books from Opened Books table
-* Implement deleting books from library
+* Implement deleting books from My Books table
 * Explore Higher Order Components for reducing duplicated code
 * Handle error messages
 

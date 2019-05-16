@@ -16,11 +16,11 @@ function PaginationControls(props) {
         prevControls = (
             <React.Fragment>
                 <PaginationItem>
-                    <PaginationLink first href='#'
+                    <PaginationLink first
                         onClick={() => props.setPage(1)} />
                 </PaginationItem>
                 <PaginationItem>
-                    <PaginationLink previous href='#'
+                    <PaginationLink previous
                         onClick={() => props.setPage(props.currPage - 1)} />
                 </PaginationItem>
             </React.Fragment>
@@ -30,11 +30,11 @@ function PaginationControls(props) {
         nextControls = (
             <React.Fragment>
                 <PaginationItem>
-                    <PaginationLink next href='#' 
+                    <PaginationLink next
                         onClick={() => props.setPage(props.currPage + 1)} />
                 </PaginationItem>
                 <PaginationItem>
-                    <PaginationLink last href='#'
+                    <PaginationLink last
                         onClick={() => props.setPage(lastPage)} />
                 </PaginationItem>
             </React.Fragment>

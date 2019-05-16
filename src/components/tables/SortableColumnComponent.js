@@ -14,7 +14,7 @@ function SortableColumn(props) {
     return (
         <th>
             <Button color="link" onClick={() => props.setSort(props.header.orderby)}>
-                {props.header.title} {arrow}
+                <span style={{ fontWeight: 'bold' }}>{props.header.title} {arrow}</span>
             </Button>
         </th>
     );

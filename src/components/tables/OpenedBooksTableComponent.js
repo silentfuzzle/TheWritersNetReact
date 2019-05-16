@@ -7,6 +7,8 @@ import SortableColumn from './SortableColumnComponent';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import { findUserReview, getProgress } from '../../utils/functions';
+import ViewIcon from '../pieces/ViewIconComponent';
+import DeleteIcon from '../pieces/DeleteIconComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -198,8 +200,8 @@ class OpenedBooksTable extends Component {
                             <td><Progress value={book.progress} color="dark" /></td>
                             <td><Button color="link" onClick={() => this.props.toggleReviewModal(book.reviewid)}>{book.rating}</Button></td>
                             <td>
-                                <Link to={`page/${book.currpage}`}><span className="fa fa-eye" title="Open"></span> </Link>
-                                <Button color="link" onClick={() => this.toggleRemoveModal(book.id)}><span className="fa fa-remove" title="Remove"></span></Button>
+                                <ViewIcon link={`page/${book.currpage}`} title="Open" />
+                                <DeleteIcon onClick={() => this.toggleRemoveModal(book.id)} title="Remove" />
                             </td>
                         </tr>
                     );
