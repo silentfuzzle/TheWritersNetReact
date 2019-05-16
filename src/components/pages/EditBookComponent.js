@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import EditBookForm from '../forms/EditBookFormComponent';
 import PermissionsTable from '../tables/PermissionsTableComponent';
 import PagesTable from '../tables/PagesTableComponent';
+import SectionsTable from '../tables/SectionsTableComponent';
 
 class EditBook extends Component {
     render() {
@@ -44,6 +45,19 @@ class EditBook extends Component {
                 <div className="row">
                     <div className="col">
                         <PagesTable bookid={this.props.bookid} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12">
+                        <h2>Sections</h2>
+                    </div>
+                    <div className="col">
+                        <Link to={'/section/edit'}>Create New Section</Link>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <SectionsTable bookid={this.props.bookid} />
                     </div>
                 </div>
             </div>

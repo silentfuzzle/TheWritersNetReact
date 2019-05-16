@@ -8,6 +8,8 @@ import { PTypes } from './permissionTypesReducer';
 import { Reviews } from './reviewsReducer';
 import { Users } from './usersReducer';
 import { Login } from './loginReducer';
+import { Sections } from './sectionsReducer';
+import { PageSections } from './pageSectionsReducer';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -15,6 +17,8 @@ export const ConfigureStore = () => {
             books: Books,
             openedBooks: OpenedBooks,
             pages: Pages,
+            sections: Sections,
+            pageSections: PageSections,
             permissions: Permissions,
             permissionTypes: PTypes,
             reviews: Reviews,

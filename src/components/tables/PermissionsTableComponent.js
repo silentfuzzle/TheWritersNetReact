@@ -228,7 +228,6 @@ class PermissionsTable extends Component {
                     buttonText={'Remove'}>
                     <p>Are you sure you want to remove this user's permissions?</p>
                 </ConfirmActionModal>
-                <h3 id="permissions">Test</h3>
                 <Card>
                     <CardHeader>Permissions</CardHeader>
                     <CardBody>
