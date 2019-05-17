@@ -7,6 +7,8 @@ import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import EditIcon from '../pieces/EditIconComponent';
 import DeleteIcon from '../pieces/DeleteIconComponent';
+import ViewIcon from '../pieces/ViewIconComponent';
+import { trimContent } from '../../utils/functions';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -82,7 +84,7 @@ class SectionsTable extends Component {
                     return {
                         ...s,
                         inUse: inUse,
-                        content: (s.content.length > 100 ? s.content.substring(0, 100) + '...' : s.content)
+                        content: trimContent(s.content)
                     }
                 });
     
@@ -182,6 +184,7 @@ class SectionsTable extends Component {
                             <td>{s.content}</td>
                             <td>{(s.inUse ? 'Yes' : 'No')}</td>
                             <td>
+                                <ViewIcon link={`/section/${s.id}`} title='View' />
                                 <EditIcon link={`section/${s.id}/edit`} />
                                 <DeleteIcon onClick={() => this.toggleDeleteModal(s.id)} title="Delete" />
                             </td>

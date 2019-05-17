@@ -7,6 +7,7 @@ import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import EditIcon from '../pieces/EditIconComponent';
 import DeleteIcon from '../pieces/DeleteIconComponent';
+import ViewIcon from '../pieces/ViewIconComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -153,7 +154,8 @@ class PagesTable extends Component {
                             <th scope="row">{p.id}</th>
                             <td><Link to={`/page/${p.id}`}>{p.title}</Link></td>
                             <td>
-                                <EditIcon link={`page/${p.id}/edit`} />
+                                <ViewIcon link={`/page/${p.id}`} title='View' />
+                                <EditIcon link={`/page/${p.id}/edit`} />
                                 <DeleteIcon onClick={() => this.toggleDeleteModal(p.id)} title="Delete" />
                             </td>
                         </tr>

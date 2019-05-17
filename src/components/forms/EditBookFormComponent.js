@@ -78,7 +78,7 @@ class EditBookForm extends Component {
                         <Label for="title">Title</Label>
                         <Control.text 
                             model=".title" 
-                            className="form-control form-control-sm mr-1" 
+                            className="form-control mr-1" 
                             id="title"
                             name="title"
                             validators={{ required }}
@@ -96,7 +96,7 @@ class EditBookForm extends Component {
                         <Label for="subtitle">Short Description</Label>
                         <Control.text 
                             model=".subtitle"
-                            className="form-control form-control-sm mr-1"
+                            className="form-control mr-1"
                             id="subtitle"
                             name="subtitle"
                             validators={{ required }}
@@ -110,7 +110,7 @@ class EditBookForm extends Component {
                     </Col>
                 </Row>
                 <Row className="form-group">
-                    <Col xs={6}>
+                    <Col md={6}>
                         <Label htmlFor="startpageid">Start Page</Label>
                         <Control.select model=".startpageid" name="startpageid" 
                                 className="form-control" defaultValue={this.state.book.startpageid}>
@@ -127,7 +127,7 @@ class EditBookForm extends Component {
                         <Label for="description">Description</Label>
                         <Control.textarea
                             model=".description"
-                            className="form-control form-control-sm mr-1"
+                            className="form-control mr-1"
                             id="description"
                             name="description"
                             rows="5"
@@ -172,7 +172,7 @@ class EditBookForm extends Component {
                         </div>
                     </Col>
                 </Row>
-                <Row className="form-group row justify-content-end">
+                <Row className="form-group justify-content-end">
                     <Col xs="auto">
                         <Button color="success">Save</Button>
                     </Col>

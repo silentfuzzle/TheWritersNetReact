@@ -8,6 +8,7 @@ import Library from './pages/LibraryComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
+import EditPage from './pages/EditPageComponent';
 import ViewProfile from './pages/ViewProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
@@ -45,6 +46,12 @@ const EditBookFromId = ({match, toggleMarkdownModal}) => {
             bookid={parseInt(match.params.id, 10)} 
             toggleMarkdownModal={toggleMarkdownModal}
             />
+    );
+};
+
+const EditPageFromId = ({match}) => {
+    return (
+        <EditPage pageid={parseInt(match.params.id, 10)} />
     );
 };
 
@@ -165,6 +172,7 @@ class Main extends Component {
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
                     <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />
+                    <Route path="/page/:id/edit" render={(props) => <EditPageFromId {...props} />} />
                     <Route path="/profile/:id" render={(props) => <ViewProfileFromId {...props} />} />
                     <Redirect to="/" />
                 </Switch>

@@ -188,8 +188,8 @@ class MyBooksTable extends Component {
                             <th scope="row"><Link to={`/book/${book.id}`}>{book.title}</Link></th>
                             <td>{book.authorship}</td>
                             <td>
-                                <EditIcon link={`book/${book.id}/edit`} />
                                 <ViewIcon link={`page/${book.startpageid}`} title='Open' />
+                                <EditIcon link={`book/${book.id}/edit`} />
                                 <DeleteIcon onClick={() => this.toggleDeleteModal(book.id)} title='Delete' />
                             </td>
                         </tr>

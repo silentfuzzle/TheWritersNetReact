@@ -55,3 +55,5 @@ export const orderBooks = (books, orderby, orderasc) => {
 
     return books;
 }
+
+export const trimContent = content => (content.length > 100 ? content.substring(0, 100) + '...' : content);
