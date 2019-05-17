@@ -10,6 +10,7 @@ import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
 import EditPage from './pages/EditPageComponent';
 import ViewProfile from './pages/ViewProfileComponent';
+import EditProfile from './pages/EditProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
 import MarkdownModal from './modals/MarkdownModalComponent';
@@ -173,6 +174,7 @@ class Main extends Component {
                     <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />
                     <Route path="/page/:id/edit" render={(props) => <EditPageFromId {...props} />} />
+                    <Route path="/profile/edit" render={() => <EditProfile toggleMarkdownModal={this.toggleMarkdownModal} />} />
                     <Route path="/profile/:id" render={(props) => <ViewProfileFromId {...props} />} />
                     <Redirect to="/" />
                 </Switch>

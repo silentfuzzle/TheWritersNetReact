@@ -131,13 +131,6 @@ class EditBookForm extends Component {
                             id="description"
                             name="description"
                             rows="5"
-                            validators={{ required }}
-                            />
-                        <Errors 
-                            className="text-danger" 
-                            model=".description" 
-                            show="touched" 
-                            messages={{ required: 'Required' }}
                             />
                         <Button color="link" onClick={this.props.toggleMarkdownModal}>Markdown Help</Button>
                     </Col>
