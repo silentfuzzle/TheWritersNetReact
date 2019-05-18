@@ -5,6 +5,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './pages/HomeComponent';
 import Library from './pages/LibraryComponent';
+import Settings from './pages/SettingsComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
@@ -170,6 +171,7 @@ class Main extends Component {
                 <Switch>
                     <Route exact path="/" render={() => <Home toggleSignupModal={this.toggleSignupModal} />} />
                     <Route path="/library" component={Library} />
+                    <Route path="/settings" component={Settings} />
                     <Route path="/mylibrary" render={() => <MyLibrary toggleReviewModal={this.toggleReviewModal} />} />
                     <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />

@@ -37,7 +37,8 @@ export const Login = (state = {
     user: {
         id: 1,
         username: 'rawbertgates',
-        displayname: 'Robert Gates'
+        displayname: 'Robert Gates',
+        email: 'robert.gates@example.com'
     },
     isLoading: false,
     errMess: ''
