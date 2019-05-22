@@ -185,7 +185,7 @@ class SectionsTable extends Component {
                             <td>{(s.inUse ? 'Yes' : 'No')}</td>
                             <td>
                                 <ViewIcon link={`/section/${s.id}`} title='View' />
-                                <EditIcon link={`section/${s.id}/edit`} />
+                                <EditIcon link={`/section/${s.id}/edit`} />
                                 <DeleteIcon onClick={() => this.toggleDeleteModal(s.id)} title="Delete" />
                             </td>
                         </tr>

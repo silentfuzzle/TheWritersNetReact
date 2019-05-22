@@ -182,8 +182,8 @@ class OrderedSectionsTable extends Component {
                             <td><Link to={`/section/${s.id}`}>{s.title}</Link></td>
                             <td>{s.content}</td>
                             <td>
-                                <ViewIcon link={`/section/${s.id}`} title="View" />
-                                <EditIcon link={`section/${s.id}/edit`} />
+                                <ViewIcon link={`/section/${s.id}/${this.props.pageid}`} title="View" />
+                                <EditIcon link={`/section/${s.id}/edit/${this.props.pageid}`} />
                                 <DeleteIcon onClick={() => this.toggleDeleteModal(s.id)} title="Remove" />
                             </td>
                         </tr>

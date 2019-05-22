@@ -10,6 +10,7 @@ import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
 import EditPage from './pages/EditPageComponent';
+import EditSection from './pages/EditSectionComponent';
 import ViewProfile from './pages/ViewProfileComponent';
 import EditProfile from './pages/EditProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
@@ -54,6 +55,20 @@ const EditBookFromId = ({match, toggleMarkdownModal}) => {
 const EditPageFromId = ({match}) => {
     return (
         <EditPage pageid={parseInt(match.params.id, 10)} />
+    );
+};
+
+const EditSectionFromId = ({match, toggleMarkdownModal}) => {
+    let pageid = parseInt(match.params.pageid, 10);
+    if (isNaN(pageid))
+        pageid = 0;
+
+    return (
+        <EditSection 
+            sectionid={parseInt(match.params.id, 10)} 
+            pageid={pageid}
+            toggleMarkdownModal={toggleMarkdownModal}
+            />
     );
 };
 
@@ -176,6 +191,8 @@ class Main extends Component {
                     <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />
                     <Route path="/page/:id/edit" render={(props) => <EditPageFromId {...props} />} />
+                    <Route path="/section/:id/edit/:pageid" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
+                    <Route path="/section/:id/edit" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/profile/edit" render={() => <EditProfile toggleMarkdownModal={this.toggleMarkdownModal} />} />
                     <Route path="/profile/:id" render={(props) => <ViewProfileFromId {...props} />} />
                     <Redirect to="/" />
