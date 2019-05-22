@@ -137,7 +137,7 @@ class EditSection extends Component {
                             </Row>
                             <Row className="form-group justify-content-end">
                                 <Col xs="auto">
-                                    <Link className="btn btn-success mr-2" to={`/section/${this.props.sectionid}`}>View Section</Link>
+                                    <Link className="btn btn-success mr-2" to={`/section/${this.props.sectionid}/${this.props.pageid}`}>View Section</Link>
                                     <Button color="success">Save</Button>
                                 </Col>
                             </Row>

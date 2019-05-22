@@ -2,9 +2,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
+* Implement the View Page layout and controls
+* Convert markdown to JSX
+* Implement the map
 * Handle Create New Book, Create New Page, and Create New Section
 * Style table headers and option buttons
-* Test PermissionsTable
 * Allow users to edit reviews anywhere reviews are displayed
 * Allow users to use markdown in reviews
 * Allow users to use markdown in profile

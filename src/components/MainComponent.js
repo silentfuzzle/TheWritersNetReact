@@ -10,6 +10,7 @@ import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
 import EditPage from './pages/EditPageComponent';
+import ViewSection from './pages/ViewSectionComponent';
 import EditSection from './pages/EditSectionComponent';
 import ViewProfile from './pages/ViewProfileComponent';
 import EditProfile from './pages/EditProfileComponent';
@@ -55,6 +56,19 @@ const EditBookFromId = ({match, toggleMarkdownModal}) => {
 const EditPageFromId = ({match}) => {
     return (
         <EditPage pageid={parseInt(match.params.id, 10)} />
+    );
+};
+
+const ViewSectionFromId = ({match}) => {
+    let pageid = parseInt(match.params.pageid, 10);
+    if (isNaN(pageid))
+        pageid = 0;
+
+    return (
+        <ViewSection 
+            sectionid={parseInt(match.params.id, 10)} 
+            pageid={pageid}
+            />
     );
 };
 
@@ -193,6 +207,8 @@ class Main extends Component {
                     <Route path="/page/:id/edit" render={(props) => <EditPageFromId {...props} />} />
                     <Route path="/section/:id/edit/:pageid" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/section/:id/edit" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
+                    <Route path="/section/:id/:pageid" render={(props) => <ViewSectionFromId {...props} />} />
+                    <Route path="/section/:id" render={(props) => <ViewSectionFromId {...props} />} />
                     <Route path="/profile/edit" render={() => <EditProfile toggleMarkdownModal={this.toggleMarkdownModal} />} />
                     <Route path="/profile/:id" render={(props) => <ViewProfileFromId {...props} />} />
                     <Redirect to="/" />
