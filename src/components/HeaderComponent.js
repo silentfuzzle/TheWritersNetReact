@@ -35,24 +35,22 @@ class Header extends Component {
         }
 
         return (
-            <React.Fragment>
-                <Navbar dark expand="sm" color="dark" className="fixed-top">
-                    <div className="container">
-                        <NavbarBrand href="/">The Writer's Net</NavbarBrand>
-                        <NavbarToggler onClick={this.toggleNav} />
-                        <Collapse isOpen={this.state.isNavOpen} navbar>
-                            <Nav navbar>
-                                <NavItem>
-                                    <NavLink className="nav-link" to="/library">Library</NavLink>
-                                </NavItem>
-                            </Nav>
-                            <div className="ml-auto">
-                                {userOptions}
-                            </div>
-                        </Collapse>
-                    </div>
-                </Navbar>
-            </React.Fragment>
+            <Navbar dark expand="sm" color="dark" className="fixed-top">
+                <div className="container">
+                    <NavbarBrand href="/">The Writer's Net</NavbarBrand>
+                    <NavbarToggler onClick={this.toggleNav} />
+                    <Collapse isOpen={this.state.isNavOpen} navbar>
+                        <Nav navbar>
+                            <NavItem>
+                                <NavLink className="nav-link" to="/library">Library</NavLink>
+                            </NavItem>
+                        </Nav>
+                        <div className="ml-auto">
+                            {userOptions}
+                        </div>
+                    </Collapse>
+                </div>
+            </Navbar>
         );
     }
 }

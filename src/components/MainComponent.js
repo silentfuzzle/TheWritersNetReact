@@ -9,6 +9,7 @@ import Settings from './pages/SettingsComponent';
 import MyLibrary from './pages/MyLibraryComponent';
 import ViewBook from './pages/ViewBookComponent';
 import EditBook from './pages/EditBookComponent';
+import ViewPage from './pages/ViewPageComponent';
 import EditPage from './pages/EditPageComponent';
 import ViewSection from './pages/ViewSectionComponent';
 import EditSection from './pages/EditSectionComponent';
@@ -16,7 +17,7 @@ import ViewProfile from './pages/ViewProfileComponent';
 import EditProfile from './pages/EditProfileComponent';
 import SignupModal from './modals/SignupModalComponent';
 import LoginModal from './modals/LoginModalComponent';
-import MarkdownModal from './modals/MarkdownModalComponent';
+import HelpModal from './modals/HelpModalComponent';
 import ReviewModal from './modals/ReviewModalComponent';
 import { addLogin, postSignup } from '../redux/loginReducer';
 
@@ -50,6 +51,12 @@ const EditBookFromId = ({match, toggleMarkdownModal}) => {
             bookid={parseInt(match.params.id, 10)} 
             toggleMarkdownModal={toggleMarkdownModal}
             />
+    );
+};
+
+const ViewPageFromId = ({match}) => {
+    return (
+        <ViewPage pageid={parseInt(match.params.id, 10)} />
     );
 };
 
@@ -189,10 +196,13 @@ class Main extends Component {
                     toggleModal={this.toggleReviewModal}
                     reviewLoading={this.state.reviewModal.loadingReview}
                     initialState={this.state.reviewModal.initialState} />
-                <MarkdownModal 
+                <HelpModal 
+                    title={'Markdown Helper'}
                     isModalOpen={this.state.isMarkdownOpen}
                     toggleModal={this.toggleMarkdownModal}
-                    />
+                    >
+                    <p>Insert markdown instructions here.</p>
+                </HelpModal>
 
                 <Header user={this.props.login.user} 
                     toggleSignupModal={this.toggleSignupModal}
@@ -205,6 +215,7 @@ class Main extends Component {
                     <Route path="/book/:id/edit" render={(props) => <EditBookFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/book/:id" render={(props) => <ViewBookFromId toggleReviewModal={this.toggleReviewModal} {...props} />} />
                     <Route path="/page/:id/edit" render={(props) => <EditPageFromId {...props} />} />
+                    <Route path="/page/:id" render={(props) => <ViewPageFromId {...props} />} />
                     <Route path="/section/:id/edit/:pageid" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/section/:id/edit" render={(props) => <EditSectionFromId toggleMarkdownModal={this.toggleMarkdownModal} {...props} />} />
                     <Route path="/section/:id/:pageid" render={(props) => <ViewSectionFromId {...props} />} />
