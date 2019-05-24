@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Row, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import BookNavigationBar from '../pieces/BookNavigationBarComponent';
 import BookNavigation from '../pieces/BookNavigationComponent';
+import PageContent from '../pieces/PageContentComponent';
 
 class ViewPage extends Component {
     constructor(props) {
@@ -16,6 +15,7 @@ class ViewPage extends Component {
 
         this.toggleSidebar = this.toggleSidebar.bind(this);
         this.toggleNavExpand = this.toggleNavExpand.bind(this);
+        this.resize = this.resize.bind(this);
     }
 
     toggleSidebar() {
@@ -42,12 +42,12 @@ class ViewPage extends Component {
     }
     
     componentDidMount() {
-        window.addEventListener("resize", this.resize.bind(this));
+        window.addEventListener("resize", this.resize);
         this.resize();
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize");
+        window.removeEventListener("resize", this.resize);
     }
 
     render() {
@@ -59,10 +59,10 @@ class ViewPage extends Component {
         );
 
         let sidebar = (<div></div>);
-        if (this.state.useSidebar) {
+        if (this.state.useSidebar && this.state.isSidebarOpen) {
             sidebar = (
                 <nav className="bg-dark" id="sidebar-pusher">
-                    <div className="p-4" id="sidebar">
+                    <div className="bg-dark p-4" id="sidebar">
                         {bookNavigation}
                     </div>
                 </nav>
@@ -87,15 +87,7 @@ class ViewPage extends Component {
                 </BookNavigationBar>
                 <div className="wrapper">
                     {sidebar}
-                    <div className="container">
-                        <Row>
-                            <Breadcrumb>
-                                <BreadcrumbItem><Link to='/mylibrary'>My Library</Link></BreadcrumbItem>
-                                <BreadcrumbItem><Link to={`/book/${this.state.bookid}`}>View Book</Link></BreadcrumbItem>
-                                <BreadcrumbItem active>Edit Page</BreadcrumbItem>
-                            </Breadcrumb>
-                        </Row>
-                    </div>
+                    <PageContent pageid={this.props.pageid} />
                 </div>
             </React.Fragment>
         );

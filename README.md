@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TODO
 
-* Implement the View Page layout and controls
+* Links to the same page with different parameters don't work
 * Convert markdown to JSX
 * Implement the map
 * Handle Create New Book, Create New Page, and Create New Section
