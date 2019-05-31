@@ -5,6 +5,7 @@ import { Progress, Button } from 'reactstrap';
 import ReviewsList from '../pieces/ReviewsListComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import { getAuthors, getRating, findUserReview } from '../../utils/functions';
+import MarkdownToHTML from '../pieces/MarkdownToHTMLComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -192,7 +193,7 @@ class ViewBook extends Component {
                 </dl>
                 <div className="row">
                     <div className="col">
-                        {book.description}
+                        <MarkdownToHTML input={book.description} />
                     </div>
                 </div>
                 {editBook}

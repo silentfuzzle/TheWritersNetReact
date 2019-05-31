@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import MarkdownToHTML from '../pieces/MarkdownToHTMLComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -109,7 +110,7 @@ class PageContent extends Component {
                 {editBook}
                 <Row>
                     <Col>
-                        {this.state.sections.map(s => (<p>{s.content}</p>))}
+                        {this.state.sections.map(s => (<MarkdownToHTML input={s.content} />))}
                     </Col>
                 </Row>
             </div>

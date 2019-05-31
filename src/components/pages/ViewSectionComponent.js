@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Row, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import MarkdownToHTML from '../pieces/MarkdownToHTMLComponent';
 
 const mapStateToProps = state => {
     // With an actual database, users and reviews would not be necessary here
@@ -84,7 +85,7 @@ class ViewSection extends Component {
                 </Row>
                 <Row>
                     {title}
-                    <p>{this.state.section.content}</p>
+                    <MarkdownToHTML input={this.state.section.content} />
                 </Row>
             </div>
         );

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Progress } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import PaginationControls from '../pieces/PaginationControlsComponent';
+import PaginationControls from './PaginationControlsComponent';
+import MarkdownToHTML from './MarkdownToHTMLComponent';
 import { formatTimeStamp } from '../../utils/functions';
 
 function ReviewsList(props) {
@@ -37,7 +38,7 @@ function ReviewsList(props) {
                 </dl>
                 <div className="row">
                     <div className="col">
-                        <p>{review.review}</p>
+                        <MarkdownToHTML input={review.review} />
                         <p>--<Link to={`/profile/${review.userid}`}>{review.author}</Link></p>
                     </div>
                 </div>

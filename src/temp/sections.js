@@ -5,21 +5,21 @@ export const SECTIONS =
         bookid: 1,
         title: 'A Section',
         displaytitle: false,
-        content: 'Etiam feugiat vulputate tortor non consectetur. Cras pulvinar nibh a porta condimentum. Proin vitae nibh lorem. Suspendisse laoreet urna id lorem tristique aliquet. Aenean et ornare metus, eget porttitor ligula. Vivamus quis vestibulum nunc, vitae finibus massa. Curabitur ut dignissim eros.'
+        content: 'Etiam feugiat **vulputate** tortor non consectetur.\nCras pulvinar nibh a porta condimentum. Proin vitae nibh lorem. Suspendisse laoreet urna id lorem tristique aliquet. Aenean et ornare metus, eget porttitor ligula. Vivamus quis vestibulum nunc, vitae finibus massa. Curabitur ut dignissim eros.'
     },
     {
         id: 2,
         bookid: 1,
         title: 'B Section',
         displaytitle: true,
-        content: 'Cras nec purus justo. Vivamus eget semper elit. Donec fermentum eros nec posuere pretium. Fusce ac iaculis arcu, vitae lobortis dui. Nam at nisi eget justo tristique vestibulum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
+        content: 'Cras nec purus justo. _Vivamus eget semper elit._ Donec fermentum eros nec posuere pretium. Fusce ac iaculis arcu, vitae lobortis dui. Nam at nisi eget justo tristique vestibulum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
     },
     {
         id: 3,
         bookid: 1,
         title: 'Copyright',
         displaytitle: false,
-        content: 'Vestibulum consequat nunc purus. Vestibulum dignissim faucibus placerat. Praesent et dignissim elit.'
+        content: 'Vestibulum consequat nunc purus.\n\n* Vestibulum dignissim faucibus placerat.\n* Praesent et dignissim elit.'
     },
     {
         id: 4,
@@ -68,7 +68,7 @@ export const SECTIONS =
         bookid: 1,
         title: 'C Section',
         displaytitle: true,
-        content: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.'
+        content: '### Contrary to popular belief, Lorem Ipsum is not simply random text.\nIt has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.'
     },
     {
         id: 11,

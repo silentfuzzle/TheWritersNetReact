@@ -5,6 +5,7 @@ import BooksTable from '../tables/BooksTableComponent';
 import ReviewsList from '../pieces/ReviewsListComponent';
 import { calculatePageSlice } from '../../utils/pagination';
 import { orderBooks, getAuthors, getRating } from '../../utils/functions';
+import MarkdownToHTML from '../pieces/MarkdownToHTMLComponent';
 
 const mapStateToProps = state => {
     // With an actual database, this method would not be necessary
@@ -242,7 +243,7 @@ class ViewProfile extends Component {
                 <div className="row">
                     <div className="col">
                         <h2>About</h2>
-                        <p>{user.about}</p>
+                        <MarkdownToHTML input={user.about} />
                     </div>
                 </div>
                 <SocialMediaBar user={user} />
