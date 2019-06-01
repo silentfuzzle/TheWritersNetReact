@@ -19,7 +19,7 @@ export const SECTIONS =
         bookid: 1,
         title: 'Copyright',
         displaytitle: false,
-        content: 'Vestibulum consequat nunc purus.\n\n* Vestibulum dignissim faucibus placerat.\n* Praesent et dignissim elit.'
+        content: 'Vestibulum [consequat](3) nunc purus.\n\n* Vestibulum [dignissim](http://www.oddworld.com/) faucibus placerat.\n* [Praesent](4) et dignissim [elit](5).'
     },
     {
         id: 4,

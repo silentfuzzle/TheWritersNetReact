@@ -24,7 +24,17 @@ class PageContent extends Component {
             isLoading: false,
             errMess: '',
             page: {},
+            pages: [],
             sections: []
+        }
+
+        this.addMapLink = this.addMapLink.bind(this);
+    }
+
+    addMapLink(page) {
+        const inBook = this.state.pages.some(p => p.toString() === page);
+        if (inBook) {
+            console.log('inBook');
         }
     }
 
@@ -37,6 +47,10 @@ class PageContent extends Component {
         setTimeout(() => {
             const page = this.props.pages.find(p => p.id === this.props.pageid);
             const book = this.props.books.find(b => b.id === page.bookid);
+            
+            const pages = this.props.pages.filter(p => p.bookid === book.id)
+                .map(p => p.id);
+
             const sections = this.props.pageSections.filter(s => s.pageid === this.props.pageid)
                 .map(ps => {
                     const section = this.props.sections.find(s => s.id === ps.sectionid);
@@ -62,6 +76,7 @@ class PageContent extends Component {
                     booktitle: book.title,
                     isAuthor: isAuthor
                 },
+                pages: pages,
                 sections: sections
             });
         }, 2000);
@@ -69,6 +84,11 @@ class PageContent extends Component {
 
     componentDidMount() {
         this.fetchPage();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.pageid !== this.props.pageid)
+            this.fetchPage();
     }
 
     render() {
@@ -87,7 +107,7 @@ class PageContent extends Component {
             editBook = (
                 <Row>
                     <Col>
-                        <Link to={`/book/${this.state.page.bookid}/edit`}>Edit Book</Link>
+                        <Link to={`/page/${this.state.page.id}/edit`}>Edit Page</Link>
                     </Col>
                 </Row>
             );
@@ -110,7 +130,10 @@ class PageContent extends Component {
                 {editBook}
                 <Row>
                     <Col>
-                        {this.state.sections.map(s => (<MarkdownToHTML input={s.content} />))}
+                        {this.state.sections.map(s => (<MarkdownToHTML 
+                                                            key={s.id} 
+                                                            input={s.content}
+                                                            addMapLink={(page) => this.addMapLink(page)} />))}
                     </Col>
                 </Row>
             </div>

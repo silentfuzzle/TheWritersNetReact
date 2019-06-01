@@ -200,6 +200,11 @@ class ViewProfile extends Component {
         this.fetchProfile();
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.userid !== this.props.userid)
+            this.fetchProfile();
+    }
+
     render() {
         if (this.state.user.isLoading) {
             return (
