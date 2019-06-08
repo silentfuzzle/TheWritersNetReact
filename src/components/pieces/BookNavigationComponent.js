@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import ConfirmActionModal from '../modals/ConfirmActionModalComponent';
 import HelpModal from '../modals/HelpModalComponent';
+import Map from './MapComponent';
 
 class BookNavigation extends Component {
     constructor(props) {
@@ -87,8 +88,8 @@ class BookNavigation extends Component {
                     </Col>
                 </Row>
                 <Row className="justify-content-center">
-                    <Col xs="auto">
-                        <p>Insert the map here.</p>
+                    <Col>
+                        <Map />
                     </Col>
                 </Row>
                 <Row className="justify-content-around">

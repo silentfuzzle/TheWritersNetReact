@@ -34,3 +34,32 @@ body {
   height: 100vh;
   z-index: 999;
 }
+
+.link {
+  fill: none;
+}
+
+/* Arrows inherit opacity from .link style */
+/* Default style of link arrows */
+#default {
+  fill: #666;
+}
+
+/* Highlight style of link arrows */
+#highlight {
+  fill: red;
+}
+
+.link.scroll {
+  stroke-dasharray: 0,2 1;
+}
+
+.node circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  opacity: 1;
+  pointer-events: none;
+}
